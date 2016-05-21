@@ -1,5 +1,5 @@
 import { Game } from './game'
-import { generateTask } from './generateTask'
+import { generateTasks } from './generateTasks'
 
 const currentGames = {}
 
@@ -43,14 +43,24 @@ export const messageHandler = {
       console.log('Client is not in a game and tried to start a round')
       return
     }
+    generateTasks(game)
     game.forEachPlayer((p) => {
-      const task = generateTask()
-      p.task = task
+      p.lives = 3
       p.emit('startRound', {
         task: task.text,
-        lives: 3,
+        lives: p.lives,
       })
     })
     game.startGameLoop()
+  },
+  action: (player, payload) => {
+    const game = player.game
+    if (payload.type === 'buttonPressed') {
+      if (player.task.isValidPress(game.state)) {
+        player.emit('validTurn', {})
+      } else {
+        player.failedPress()
+      }
+    }
   },
 }
