@@ -6,33 +6,13 @@ Every communication ist in the form:
     payload: {}
 }
 ```
-### Login
-##### Client
-```javascript
-{
-    event: "login",
-    payload: {
-        name: ""
-    }
-}
-```
-##### Server
-```javascript
-{
-    event: "login",
-    payload: {
-        playerId: "",
-        error: null | ""
-    }
-}
-```
 ### MainMenu
 ##### Client
 ```javascript
 {
     event: "createGame",
     payload: {
-        playerId: ""
+        playerName: ""
     }
 }
 ```
@@ -41,7 +21,7 @@ Every communication ist in the form:
     event: "joinGame",
     payload: {
         gameId: "",
-        playerId: ""
+        playerName: ""
     }
 }
 ```
@@ -51,6 +31,7 @@ Every communication ist in the form:
     event: "createGame",
     payload: {
         gameId: "",
+        playerId: "",
         error: null | ""
     }
 }
@@ -59,6 +40,7 @@ Every communication ist in the form:
 {
     event: "joinGame",
     payload: {
+        playerId: "",
         error: null | ""
     }
 }
@@ -87,6 +69,14 @@ Every communication ist in the form:
 {
     event: "playerList",
     payload: {
+        players: [""]
+    }
+}
+```
+```javascript
+{
+    event: "startRound",
+    payload: { 
         task: "You have to press someday...",
         lives: 3
     }
@@ -96,7 +86,7 @@ Every communication ist in the form:
 {
     event: "updateGameState",
     payload: {
-        color: "#FFFFFF",
+        buttonColor: "#FFFFFF",
         buttonText: "blue"
     }
 }
