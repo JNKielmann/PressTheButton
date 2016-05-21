@@ -1,10 +1,12 @@
 import uuid from 'node-uuid'
+import { randomButtonColor, randomButtonText } from './stateHelper'
+
 
 export class Game {
   constructor() {
     this.id = uuid.v1()
     this.players = []
-
+    this.roundIsRunning = false
     this.loopCounter = 0
   }
   addPlayer(player) {
@@ -22,45 +24,53 @@ export class Game {
         loser: loserName,
       })
     })
-    clearTimeout(this.timeout)
+    this.roundIsRunning = false
   }
   startGameLoop() {
+    console.log('New Gameloop started')
+    this.roundIsRunning = true
     this.loopCounter = 0
     let timeTillNextLoop = 0
+    this.state = {
+      playerStates: [],
+    }
     const gameLoop = () => {
-      this.forEachPlayer((p) => {
-        if (p.task.isValidPress(this.state)) {
-          p.failedPress()
-        }
-      })
+      if (!this.roundIsRunning) {
+        return
+      }
+      if (this.state && this.state.playerStates.length > 0) {
+        this.forEachPlayer((p) => {
+          if (!p.hasPressed && p.task.isValidPress(this.state)) {
+            p.failedPress()
+          }
+        })
+      }
 
       this.state = {
         playerStates: [],
       }
       this.forEachPlayer((p) => {
-        const playerState = this.generateRandomPlayerState()
-        this.state.playerStates.push(Object.assign(playerState, { playerId: p.id }))
-        p.emit('updateGameState', playerState)
+        p.hasPressed = false
+        if (this.state.playerStates.length === 0 || Math.random() < 0.7) {
+          const playerState = this.generateRandomPlayerState()
+          this.state.playerStates.push(Object.assign(playerState, { playerId: p.id }))
+          p.emit('updateGameState', playerState)
+        }
       })
       timeTillNextLoop = this.computeNextLoopTime()
       this.timeout = setTimeout(gameLoop, timeTillNextLoop)
       ++this.loopCounter
     }
-    this.timeout = setTimeout(gameLoop, timeTillNextLoop)
+    gameLoop()
   }
 
   /**
    * @private
    */
   generateRandomPlayerState() {
-    function randomArrayElement(array) {
-      return array[Math.floor(Math.random() * array.length)]
-    }
-    const colors = ['red', 'green', 'blue', 'yellow', 'pink', 'brown']
-    const words = ['red', 'green', 'blue', 'yellow', 'pink', 'brown']
     return {
-      buttonColor: randomArrayElement(colors),
-      buttonText: randomArrayElement(words),
+      buttonColor: randomButtonColor(),
+      buttonText: randomButtonText(),
     }
   }
 
@@ -68,11 +78,17 @@ export class Game {
    * @private
    */
   computeNextLoopTime() {
-    if (this.loopCounter < 4) {
-      return 2000
+    if (this.loopCounter < 5) {
+      return 3500
+    } else if (this.loopCounter < 10) {
+      return 2500
     } else if (this.loopCounter < 15) {
-      return 1000
+      return 2000
+    } else if (this.loopCounter < 25) {
+      return 1500
+    } else if (this.loopCounter < 35) {
+      return 1200
     }
-    return 500
+    return 900
   }
 }

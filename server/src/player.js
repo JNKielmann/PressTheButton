@@ -5,6 +5,7 @@ export class Player {
     this.id = uuid.v1()
     this.name = ''
     this.wsConnection = wsConnection
+    this.hasPressed = false
   }
   emit(event, payload) {
     this.wsConnection.send(JSON.stringify({
@@ -19,6 +20,7 @@ export class Player {
   }
   failedPress() {
     --this.lives
+    console.log('player lost live')
     this.emit('invalidTurn', { lives: this.lives })
     if (this.lives <= 0) {
       this.game.endRound(this.name)
