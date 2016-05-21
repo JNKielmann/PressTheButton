@@ -16,20 +16,30 @@ export class Game {
   forEachPlayer(callback) {
     return this.players.forEach(callback)
   }
+  endRound(loserName) {
+    this.forEachPlayer((p) => {
+      p.emit('endRound', {
+        loser: loserName,
+      })
+    })
+    clearTimeout(this.timeout)
+  }
   startGameLoop() {
     this.loopCounter = 0
     let timeTillNextLoop = 0
     const gameLoop = () => {
-    // TODO: Check if players did not press the button in time
+      this.forEachPlayer((p) => {
+        if (p.task.isValidPress(this.state)) {
+          p.failedPress()
+        }
+      })
+
       this.state = {
         playerStates: [],
       }
       this.forEachPlayer((p) => {
         const playerState = this.generateRandomPlayerState()
-        this.state.playerStates.push({
-          playerId: p.id,
-          state: playerState,
-        })
+        this.state.playerStates.push(Object.assign(playerState, { playerId: p.id }))
         p.emit('updateGameState', playerState)
       })
       timeTillNextLoop = this.computeNextLoopTime()
