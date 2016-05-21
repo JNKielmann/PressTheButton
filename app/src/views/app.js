@@ -12,6 +12,7 @@ import Login from './login'
 import MainMenu from './mainMenu'
 import Lobby from './lobby'
 import Game from './game'
+import Loser from './loser'
 import BarcodeScanner from 'react-native-barcodescanner';
 
 class App extends Component{
@@ -27,7 +28,8 @@ class App extends Component{
       isHost: false,
       gameData: {},
       task: '',
-      lives: 0
+      lives: 0,
+      loser: ''
     }
   }
   render() {
@@ -116,6 +118,23 @@ class App extends Component{
             gameData: data.payload
           })
         })
+        Connection.onValidTurn((data) => {
+          //TODO: show cool animation!
+        })
+        Connection.onInvalidTurn((data) => {
+          this.setState({
+            lives: data.payload.lives
+          })
+          //TODO: show cool animation!
+        })
+        Connection.onEndRound((data) => {
+          this.setState({loser: data.payload.loser})
+          var nextIndex = route.index + 1;
+          navigator.push({
+            name: 'loser',
+            index: nextIndex,
+          })
+        })
         return (
           <Game 
             gameData={this.state.gameData}
@@ -131,6 +150,16 @@ class App extends Component{
             style={{ flex: 1 }}
             torchMode={'off'}
             cameraType={'back'}
+          />
+        )
+      case 'loser':
+        return (
+          <Loser
+            loser={this.state.loser}
+            isHost={this.state.isHost}
+            onNextRound={() => {
+              Connection.doStartRound({playerId: this.state.playerId})
+            }}
           />
         )
     }

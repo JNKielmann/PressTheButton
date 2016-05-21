@@ -2,44 +2,40 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
-  Text,
-  TextInput,
-  View
+  View,
+  Text
 } from 'react-native';
 
 import Button from 'react-native-button'
 
-class Login extends Component{
+class Loser extends Component{
   constructor(props){
     super(props)
-    this.onPressLogin = this.onPressLogin.bind(this)
-    this.state = {name: ''}
+    this.onPressNextRound = this.onPressNextRound.bind(this)
   }
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.formular}>
-          <Text>Name:</Text>
-          <TextInput
-            style={styles.inputField}
-            onChangeText={(name) => this.setState({name})}
-            value={this.state.name}
-          />
-          <Button style={styles.button} onPress={this.onPressLogin}>
-            Login
-          </Button>
-        </View>
+        <Text>{this.props.loser} lost this round!</Text>
+        {this.showNextRoundButtonIfNecessery(this.props.isHost)}
       </View>
     )
   }
-  onPressLogin() {
-    this.props.onForward(this.state.name)
+  showNextRoundButtonIfNecessery(isHost) {
+    if(isHost) {
+      return (
+        <Button style={styles.button} onPress={this.onPressNextRound}>
+          Next Round
+        </Button>
+      )
+    }
+  }
+  onPressNextRound() {
+    this.props.onNextRound()
   }
 }
 
 var styles = StyleSheet.create({
-  formular: {
-  },
   button: {
     width: 150,
     marginTop: 20,
@@ -65,4 +61,4 @@ var styles = StyleSheet.create({
   },
 })
 
-module.exports = Login
+module.exports = Loser

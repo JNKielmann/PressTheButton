@@ -9,7 +9,6 @@ import {
 
 import Button from 'react-native-button'
 import QRCode from 'react-native-qrcode'
-import * as Connection from '../network/connector'
 
 class Lobby extends Component{
   constructor(props){
