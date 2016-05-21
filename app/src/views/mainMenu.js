@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 
 import Button from 'react-native-button'
-import * as Connection from '../network/connector'
 
 class MainMenu extends Component{
   constructor(props){

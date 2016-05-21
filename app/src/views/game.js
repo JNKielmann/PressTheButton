@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 
 import Button from 'react-native-button'
-import * as Connection from '../network/connector'
 
 class Game extends Component{
   constructor(props){
