@@ -3,7 +3,6 @@ import * as Connection from '../constants/network'
 var listeners = {}
 var ws
 
-
 export function init() {
   ws = new WebSocket(Connection.SERVER_URL)
   ws.onopen = () => {
