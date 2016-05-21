@@ -8,60 +8,91 @@ import {
 } from 'react-native';
 
 import Button from 'react-native-button'
+import * as Colors from '../constants/colors'
 
 class Login extends Component{
   constructor(props){
     super(props)
     this.onPressLogin = this.onPressLogin.bind(this)
-    this.state = {name: ''}
+    this.state = {
+      name: '',
+      errorMessage: ''
+    }
   }
   render() {
     return (
       <View style={styles.container}>
+          <Text style={styles.text}>
+            What is your name?
+          </Text>
         <View style={styles.formular}>
-          <Text>Name:</Text>
+          <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
           <TextInput
             style={styles.inputField}
             onChangeText={(name) => this.setState({name})}
             value={this.state.name}
           />
-          <Button style={styles.button} onPress={this.onPressLogin}>
-            Login
-          </Button>
         </View>
+        <Button 
+          containerStyle={styles.button}
+          style={styles.buttonText} 
+          onPress={this.onPressLogin}>
+          Login
+        </Button>
       </View>
     )
   }
   onPressLogin() {
-    this.props.onForward(this.state.name)
+    var nameWithoutSpaces = this.state.name.trim()
+    if(nameWithoutSpaces !== "") {
+      this.props.onForward(nameWithoutSpaces)
+    }else{
+      this.showErrorMessage('Enter a valid name you bastard!')
+    }
+  }
+  showErrorMessage(errorMessage) {
+    this.setState({errorMessage})
   }
 }
 
 var styles = StyleSheet.create({
   formular: {
   },
+  errorMessage: {
+    color: Colors.ERROR_MESSAGE
+  },
+  text: {
+    marginBottom: 40,
+    fontSize: 30,
+    color: Colors.LOGIN_INFO_TEXT
+  },
   button: {
-    width: 150,
+    width: 200,
     marginTop: 20,
-    padding:5,
+    padding:4,
     borderWidth: 2,
-    fontSize: 18,
+    backgroundColor: Colors.MAIN_BUTTON_BACKGROUND,
+  },
+  buttonText: {
+    fontSize: 24,
     textAlign: 'center',
-    color: "rgba(0,0,0,1)"
+    color: Colors.MAIN_BUTTON_TEXT,
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: Colors.BACKGROUND
   },
   inputField: {
     padding: 5,
     borderWidth: 2,
     width: 200,
     height: 40,
-    fontSize: 18,
+    fontSize: 20,
     textAlign: 'center',
-    color: '#656565'
+    color: Colors.INPUT_FIELD_TEXT,
+    backgroundColor: Colors.INPUT_FIELD_BACKGROUND,
   },
 })
 

@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 
 import Button from 'react-native-button'
+import * as Colors from '../constants/colors'
 
 class MainMenu extends Component{
   constructor(props){
@@ -16,10 +17,16 @@ class MainMenu extends Component{
   render() {
     return (
       <View style={styles.container}>
-        <Button style={styles.button} onPress={this.onPressCreateGame}>
+        <Button 
+          containerStyle={styles.button}
+          style={styles.buttonText}
+          onPress={this.onPressCreateGame}>
           Create Game
         </Button>
-        <Button style={styles.button} onPress={this.onPressJoinGame}>
+        <Button 
+          containerStyle={styles.button}
+          style={styles.buttonText} 
+          onPress={this.onPressJoinGame}>
           Join Game
         </Button>
       </View>
@@ -34,30 +41,25 @@ class MainMenu extends Component{
 }
 
 var styles = StyleSheet.create({
-  formular: {
+  buttonText: {
+    fontSize: 24,
+    textAlign: 'center',
+    color: Colors.MAIN_BUTTON_TEXT,
   },
   button: {
-    width: 150,
-    marginTop: 20,
-    padding:5,
+    width: 200,
+    marginTop: 70,
+    padding:20,
     borderWidth: 2,
-    fontSize: 18,
-    textAlign: 'center',
-    color: "rgba(0,0,0,1)"
+    backgroundColor: Colors.MAIN_BUTTON_BACKGROUND,
+    borderRadius: 20,
+    overflow: 'hidden',
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  inputField: {
-    padding: 5,
-    borderWidth: 2,
-    width: 200,
-    height: 40,
-    fontSize: 18,
-    textAlign: 'center',
-    color: '#656565'
+    backgroundColor: Colors.BACKGROUND
   },
 })
 
