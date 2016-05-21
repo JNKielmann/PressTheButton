@@ -15,7 +15,9 @@ export function init() {
     }
   }
   ws.onerror = (e) => {
-    console.log(e.message)
+    if(listeners[Connection.ERROR_EVENT]) {
+      listeners[Connection.ERROR_EVENT](e.message)
+    }
   }
   ws.onclose = (e) => {
     console.log(e.code, e.reason)
@@ -77,6 +79,10 @@ export function onEndRound(cb) {
 
 export function onStartRound(cb) {
   listeners[Connection.START_ROUND_EVENT] = cb
+}
+
+export function onError(cb) {
+  listeners[Connection.ERROR_EVENT] = cb
 }
 
 export function doStartRound(obj) {

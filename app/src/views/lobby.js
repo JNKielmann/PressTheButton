@@ -3,12 +3,13 @@ import {
   AppRegistry,
   StyleSheet,
   View,
-  ListView,
+  ScrollView,
   Text
 } from 'react-native';
 
 import Button from 'react-native-button'
 import QRCode from 'react-native-qrcode'
+import * as Colors from '../constants/colors'
 
 class Lobby extends Component{
   constructor(props){
@@ -16,8 +17,6 @@ class Lobby extends Component{
     this.onPressStartGame = this.onPressStartGame.bind(this)
   }
   render() {
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
-    var players = ds.cloneWithRows(this.props.players)
     return (
       <View style={styles.container}>
         <View style={styles.formular}>
@@ -25,20 +24,33 @@ class Lobby extends Component{
             value={this.props.gameId}
             size={250}
             bgColor='black'
-            fgColor='white'/>
-          <ListView
-            dataSource={players}
-            renderRow={(rowData) => <Text>{rowData}</Text>}
-          />
+            fgColor='#A2BAD1'/>
         </View>
+        <ScrollView
+          ref={(scrollView) => { _scrollView = scrollView; }}
+          automaticallyAdjustContentInsets={false}
+          scrollEventThrottle={200}
+          style={styles.playerList}>
+          {this.props.players.map(this.createPlayersRow)}
+        </ScrollView>
         {this.showStartGameButtonIfNecessery(this.props.isHost)}
+      </View>
+    )
+  }
+  createPlayersRow(player) {
+    return (
+      <View key={player} style={styles.row}>
+        <Text style={styles.name}>{player}</Text>
       </View>
     )
   }
   showStartGameButtonIfNecessery(isHost) {
     if(isHost) {
       return (
-        <Button style={styles.button} onPress={this.onPressStartGame}>
+        <Button 
+          containerStyle={styles.button}
+          style={styles.buttonText} 
+          onPress={this.onPressStartGame}>
           Start Game
         </Button>
       )
@@ -50,21 +62,41 @@ class Lobby extends Component{
 }
 
 var styles = StyleSheet.create({
+  playerList: {
+    marginTop: 50,
+  },
+  row: {
+    borderWidth: 2,
+    borderRadius: 20,
+    width: 250,
+    overflow: 'hidden',
+    backgroundColor: Colors.LOBBY_PLAYER_LIST_BACKGROUND
+  },
+  name: {
+    fontSize: 20,
+    textAlign: 'center'
+  },
   formular: {
+    marginTop: 50
   },
   button: {
-    width: 150,
-    marginTop: 20,
-    padding:5,
+    width: 200,
+    marginBottom: 20,
+    padding:20,
     borderWidth: 2,
-    fontSize: 18,
-    textAlign: 'center',
-    color: "rgba(0,0,0,1)"
+    backgroundColor: Colors.MAIN_BUTTON_BACKGROUND,
+    borderRadius: 20,
+    overflow: 'hidden'
+  },
+  buttonText: {
+    fontSize: 24,
+    color: Colors.MAIN_BUTTON_TEXT,
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: Colors.BACKGROUND
   },
   inputField: {
     padding: 5,
@@ -73,7 +105,7 @@ var styles = StyleSheet.create({
     height: 40,
     fontSize: 18,
     textAlign: 'center',
-    color: '#656565'
+    color: Colors.INPUT_FIELD_TEXT
   },
 })
 

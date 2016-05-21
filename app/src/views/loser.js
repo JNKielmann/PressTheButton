@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 
 import Button from 'react-native-button'
+import * as Colors from '../constants/colors'
 
 class Loser extends Component{
   constructor(props){
@@ -16,7 +17,7 @@ class Loser extends Component{
   render() {
     return (
       <View style={styles.container}>
-        <Text>{this.props.loser} lost this round!</Text>
+        <Text style={styles.text}>{this.props.loser} lost this round!</Text>
         {this.showNextRoundButtonIfNecessery(this.props.isHost)}
       </View>
     )
@@ -24,7 +25,10 @@ class Loser extends Component{
   showNextRoundButtonIfNecessery(isHost) {
     if(isHost) {
       return (
-        <Button style={styles.button} onPress={this.onPressNextRound}>
+        <Button 
+          containerStyle={styles.button}
+          style={styles.buttonText} 
+          onPress={this.onPressNextRound}>
           Next Round
         </Button>
       )
@@ -36,28 +40,30 @@ class Loser extends Component{
 }
 
 var styles = StyleSheet.create({
-  button: {
-    width: 150,
-    marginTop: 20,
-    padding:5,
-    borderWidth: 2,
-    fontSize: 18,
+  text: {
+    marginBottom: 40,
+    fontSize: 30,
+    color: Colors.LOGIN_INFO_TEXT
+  },
+  buttonText: {
+    fontSize: 24,
     textAlign: 'center',
-    color: "rgba(0,0,0,1)"
+    color: Colors.MAIN_BUTTON_TEXT,
+  },
+  button: {
+    width: 200,
+    marginTop: 70,
+    padding:20,
+    borderWidth: 2,
+    backgroundColor: Colors.MAIN_BUTTON_BACKGROUND,
+    borderRadius: 20,
+    overflow: 'hidden',
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  inputField: {
-    padding: 5,
-    borderWidth: 2,
-    width: 200,
-    height: 40,
-    fontSize: 18,
-    textAlign: 'center',
-    color: '#656565'
+    backgroundColor: Colors.BACKGROUND
   },
 })
 

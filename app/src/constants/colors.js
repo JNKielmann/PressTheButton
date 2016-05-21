@@ -1,0 +1,8 @@
+export const BACKGROUND = '#A2BAD1'
+export const MAIN_BUTTON_BACKGROUND = '#FC5112'
+export const MAIN_BUTTON_TEXT = '#000000'
+export const INPUT_FIELD_TEXT = '#656565'
+export const INPUT_FIELD_BACKGROUND = '#F8FAFF'
+export const LOBBY_PLAYER_LIST_BACKGROUND = '#F5F9FF'
+export const LOGIN_INFO_TEXT = '#F5F8FA'
+export const ERROR_MESSAGE = '#FA0015'

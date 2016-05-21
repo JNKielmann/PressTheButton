@@ -4,10 +4,14 @@ import {
   StyleSheet,
   View,
   TouchableHighlight,
-  Text
+  Text,
+  Image
 } from 'react-native';
 
 import Button from 'react-native-button'
+import Color from 'color'
+import * as Colors from '../constants/colors'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 class Game extends Component{
   constructor(props){
@@ -15,23 +19,44 @@ class Game extends Component{
     this.onPressButton = this.onPressButton.bind(this)
   }
   render() {
+    var buttonTextColor = this.calcButtonTextColor(this.props.gameData.buttonColor)
+    var hearts = []
+    for(var i=0;i<this.props.lives;i++){
+      hearts.push(<Icon key={'live'+i} style={{padding:4}} name="heart" size={30} color="#FF0002" />)
+    }
     return (
       <View style={styles.container}>
-        <View>
-          <Text>{this.props.task}</Text>
+        <View style={styles.taskView}>
+          <Text style={styles.task}>{this.props.task}</Text>
         </View>
-        <TouchableHighlight onPress={this.onPressButton}>
-          <View style={{backgroundColor: this.props.gameData.buttonColor}}>
-            <View style={styles.button}>
-              <Text>{this.props.gameData.buttonText}</Text>
+        <View style={styles.buttonArea}>
+          <TouchableHighlight 
+            style={{
+              borderRadius: 250,
+              overflow: 'hidden'
+            }} 
+            onPress={this.onPressButton}>
+            <View style={[styles.button,{backgroundColor: this.props.gameData.buttonColor}]}>
+                <Text 
+                  style={
+                    [
+                      {color: buttonTextColor},
+                      styles.buttonText
+                    ]}>
+                  {this.props.gameData.buttonText}
+                </Text>
             </View>
-          </View>
-        </TouchableHighlight>
-        <View>
-          <Text>Leben: {this.props.lives}</Text>
+          </TouchableHighlight>
+        </View>
+        <View style={styles.lives}>
+          {hearts}
         </View>
       </View>
     )
+  }
+  calcButtonTextColor(buttonColor) {
+    var color = Color(buttonColor)
+    return color.negate().rgbString()
   }
   onPressButton() {
     this.props.onPressButton()
@@ -39,15 +64,38 @@ class Game extends Component{
 }
 
 var styles = StyleSheet.create({
+  lives: {
+    marginLeft: 20,
+    marginBottom: 15,
+    alignSelf: 'flex-start',
+    flexDirection: 'row'
+  },
+  taskView: {
+    marginTop: 50
+  },
+  task: {
+    fontSize: 40
+  },
+  buttonArea: {
+  },
+  buttonText: {
+    fontSize: 60,
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
   button: {
-    width: 150,
-    height: 150,
+    width: 250,
+    height: 250,
     borderWidth: 2,
+    borderRadius: 250,
+    overflow: 'hidden',
+    justifyContent: 'center'
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: Colors.BACKGROUND
   },
   inputField: {
     padding: 5,
@@ -56,7 +104,7 @@ var styles = StyleSheet.create({
     height: 40,
     fontSize: 18,
     textAlign: 'center',
-    color: '#656565'
+    color: Colors.INPUT_FIELD_TEXT
   },
 })
 

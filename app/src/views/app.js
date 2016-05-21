@@ -41,6 +41,9 @@ class App extends Component{
     )
   }
   renderScene(route, navigator) {
+    Connection.onError((data) => {
+      this.showErrorMessage(data, navigator)
+    })
     switch(route.name) {
       case 'login':
         return (
@@ -164,6 +167,10 @@ class App extends Component{
         )
     }
   }
+  showErrorMessage(message, navigator) {
+    //TODO: show error message
+    console.warn(message)
+  }
   onPressButton() {
     Connection.doAction(
       {
@@ -191,7 +198,6 @@ var styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
   },
 })
 
