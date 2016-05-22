@@ -122,7 +122,11 @@ class App extends Component{
               Connection.doStartRound({playerId: this.state.playerId})
             }}
             onCancel={() => {
-              Connection.doCancelGame({playerId: this.state.playerId})
+              Connection.doRemoveFromGame(
+                {
+                  playerId: this.state.playerId,
+                  gameId: this.state.gameId
+                })
               navigator.pop()
             }}
           />
@@ -178,7 +182,11 @@ class App extends Component{
               Connection.doStartRound({playerId: this.state.playerId})
             }}
             onGiveUp={() => {
-              Connection.doGiveUp({playerId: this.state.playerId})
+              Connection.doRemoveFromGame(
+                {
+                  playerId: this.state.playerId,
+                  gameId: this.state.gameId
+                })
               navigator.pop()
             }}
           />
