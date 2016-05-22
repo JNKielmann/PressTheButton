@@ -12,6 +12,12 @@ export class Game {
   addPlayer(player) {
     this.players.push(player)
   }
+  removePlayer(player) {
+    var index = this.players.indexOf(player)
+    if(index > -1) {
+      this.players.splice(index, 1)
+    }
+  }
   getPlayerNames() {
     return this.players.map(p => p.name)
   }
@@ -24,6 +30,9 @@ export class Game {
         loser: loserName,
       })
     })
+    this.stopGameLoop()
+  }
+  stopGameLoop() {
     this.roundIsRunning = false
   }
   startGameLoop() {

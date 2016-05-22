@@ -66,4 +66,22 @@ export const messageHandler = {
       }
     }
   },
+  removeFromGame: (player, payload) => {
+    const game = currentGames[payload.gameId]
+    if (!game) {
+      console.log(`Client tried to get removed from not existing game ${payload.gameId}`)
+      return
+    }
+    game.removePlayer(player)
+    const playerNames = game.getPlayerNames()
+    game.forEachPlayer((p) => {
+      p.emit('playerList', { players: playerNames })
+    })
+    console.log('Player removed')
+    if(game.getPlayerNames().length == 0) {
+      game.stopGameLoop()
+      delete currentGames[payload.gameId]
+      console.log('Game deleted')
+    }
+  },
 }
