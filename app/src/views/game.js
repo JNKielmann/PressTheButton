@@ -6,7 +6,8 @@ import {
   TouchableHighlight,
   Text,
   Image,
-  LayoutAnimation
+  LayoutAnimation,
+  BackAndroid
 } from 'react-native';
 
 import Button from 'react-native-button'
@@ -30,6 +31,9 @@ class Game extends Component{
       countdownStarted: false,
       countdownEnded: false
     }
+    BackAndroid.addEventListener('hardwareBackPress', function() {
+      return true
+    })
   }
   render() {
     var buttonTextColor = this.calcButtonTextColor(this.props.gameData.buttonColor)
