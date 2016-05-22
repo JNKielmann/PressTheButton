@@ -36,7 +36,9 @@ wsServer.on('request', (request) => {
         return
       }
       console.log(messageHandler)
-      messageHandler[data.event](player, data.payload)
+      if(messageHandler[data.event]) {
+        messageHandler[data.event](player, data.payload)
+      }
     }
   })
   connection.on('close', () => {
