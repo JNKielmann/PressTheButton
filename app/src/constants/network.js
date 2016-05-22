@@ -1,4 +1,4 @@
-export const SERVER_URL = 'ws://10.183.252.131:8080'
+export const SERVER_URL = 'ws://87.106.19.69:8085'
 export const CREATE_GAME_EVENT = 'createGame'
 export const JOIN_GAME_EVENT = 'joinGame'
 export const START_ROUND_EVENT = 'startRound'
