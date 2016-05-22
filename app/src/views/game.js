@@ -24,8 +24,15 @@ class Game extends Component{
     for(var i=0;i<this.props.lives;i++){
       hearts.push(<Icon key={'live'+i} style={{padding:4}} name="heart" size={30} color="#FF0002" />)
     }
+    var feedbackStyle = {}
+    if(this.props.validTurn) {
+      feedbackStyle.backgroundColor = '#34FC12'
+    }
+    if(this.props.invalidTurn) {
+      feedbackStyle.backgroundColor = '#FC0008'
+    }
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, feedbackStyle]}>
         <View style={styles.taskView}>
           <Text style={styles.task}>{this.props.task}</Text>
         </View>

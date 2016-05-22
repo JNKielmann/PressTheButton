@@ -2,24 +2,29 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
-  Navigator
+  Navigator,
+  Alert
 } from 'react-native';
 
 import * as Connection from '../network/connector'
 import * as ActionTypes from '../constants/actionTypes'
+import * as FeedbackConstants from '../constants/feedback'
 
 import Login from './login'
 import MainMenu from './mainMenu'
 import Lobby from './lobby'
 import Game from './game'
 import Loser from './loser'
-import BarcodeScanner from 'react-native-barcodescanner';
+import BarcodeScanner from 'react-native-barcodescanner'
+import ReactTimeout from 'react-timeout/native'
 
 class App extends Component{
   constructor(props){
     super(props)
     Connection.init()
     this.renderScene = this.renderScene.bind(this)
+    this.turnOffValidTurn = this.turnOffValidTurn.bind(this)
+    this.turnOffInvalidTurn = this.turnOffInvalidTurn.bind(this)
     this.state = {
       name: '',
       gameId: '',
@@ -29,7 +34,9 @@ class App extends Component{
       gameData: {},
       task: '',
       lives: 0,
-      loser: ''
+      loser: '',
+      validTurn: false,
+      invalidTurn: false
     }
   }
   render() {
@@ -122,13 +129,15 @@ class App extends Component{
           })
         })
         Connection.onValidTurn((data) => {
-          //TODO: show cool animation!
+          this.setState({validTurn: true})
+          this.props.setTimeout(this.turnOffValidTurn, FeedbackConstants.FEEDBACK_TIME)
         })
         Connection.onInvalidTurn((data) => {
           this.setState({
-            lives: data.payload.lives
+            lives: data.payload.lives,
+            invalidTurn: true
           })
-          //TODO: show cool animation!
+          this.props.setTimeout(this.turnOffInvalidTurn, FeedbackConstants.FEEDBACK_TIME)
         })
         Connection.onEndRound((data) => {
           this.setState({loser: data.payload.loser})
@@ -143,6 +152,8 @@ class App extends Component{
             gameData={this.state.gameData}
             task={this.state.task}
             lives={this.state.lives}
+            validTurn={this.state.validTurn}
+            invalidTurn={this.state.invalidTurn}
             onPressButton={()=>this.onPressButton()}
           />
         )
@@ -167,9 +178,17 @@ class App extends Component{
         )
     }
   }
+  turnOffValidTurn(valid) {
+    this.setState({ validTurn: false })
+  }
+  turnOffInvalidTurn(invalid) {
+    this.setState({ invalidTurn: false })
+  }
   showErrorMessage(message, navigator) {
-    //TODO: show error message
-    console.warn(message)
+    Alert.alert(
+            'Error',
+            message,
+          )
   }
   onPressButton() {
     Connection.doAction(
@@ -201,4 +220,4 @@ var styles = StyleSheet.create({
   },
 })
 
-module.exports = App
+export default ReactTimeout(App)
