@@ -60,6 +60,7 @@ class Game extends Component{
       var buttonText
       var buttonColor
       var viewRef
+      var buttonText180
       if(this.state.countdown>0){
         buttonText = this.state.countdown
         buttonColor = Colors.COUNTDOWN_BUTTON
@@ -68,7 +69,18 @@ class Game extends Component{
         buttonText = this.props.gameData.buttonText
         buttonColor = this.props.gameData.buttonColor
         viewRef = 'button'
+        buttonText180 = (
+          <Text 
+            style={
+              [
+                {transform: [{rotate: '180deg'}]},
+                {color: this.calcButtonTextColor(buttonColor)},
+                styles.buttonText
+              ]}>
+            {buttonText}
+          </Text>)
       }
+      
       views.push(
         <Animatable.View 
           ref={viewRef}
@@ -82,6 +94,7 @@ class Game extends Component{
             disabled={!this.state.countdownEnded}
             onPress={this.onPressButton}>
             <View style={[styles.button,{backgroundColor: buttonColor}]}>
+                {buttonText180}
                 <Text 
                   style={
                     [
