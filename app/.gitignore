@@ -38,3 +38,8 @@ buck-out/
 \.buckd/
 android/app/libs
 android/keystores/debug.keystore
+
+# apk sign process
+android/app/my-release-key.keystore
+android/app/src/main/assets/
+my-release-key.keystore
