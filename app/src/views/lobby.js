@@ -15,6 +15,7 @@ class Lobby extends Component{
   constructor(props){
     super(props)
     this.onPressStartGame = this.onPressStartGame.bind(this)
+    this.onPressCancel = this.onPressCancel.bind(this)
   }
   render() {
     return (
@@ -33,7 +34,15 @@ class Lobby extends Component{
           style={styles.playerList}>
           {this.props.players.map(this.createPlayersRow)}
         </ScrollView>
-        {this.showStartGameButtonIfNecessery(this.props.isHost)}
+        <View style={styles.buttonArea}>
+          <Button 
+            containerStyle={styles.button}
+            style={styles.buttonText} 
+            onPress={this.onPressCancel}>
+            Cancel
+          </Button>
+          {this.showStartGameButtonIfNecessery(this.props.isHost)}
+        </View>
       </View>
     )
   }
@@ -59,9 +68,15 @@ class Lobby extends Component{
   onPressStartGame() {
     this.props.onForward()
   }
+  onPressCancel() {
+    this.props.onCancel()
+  }
 }
 
 var styles = StyleSheet.create({
+  buttonArea: {
+    flexDirection: 'row'
+  },
   playerList: {
     marginTop: 50,
   },

@@ -95,6 +95,26 @@ export function doStartRound(obj) {
   ws.send(JSON.stringify(data))
 }
 
+export function doCancelGame(obj) {
+  var data = {
+    event: Connection.CANCEL_GAME_EVENT,
+    payload: {
+      playerId: obj.playerId
+    }
+  }
+  ws.send(JSON.stringify(data))
+}
+
+export function doGiveUp(obj) {
+  var data = {
+    event: Connection.GIVE_UP_EVENT,
+    payload: {
+      playerId: obj.playerId
+    }
+  }
+  ws.send(JSON.stringify(data))
+}
+
 export function doAction(obj) {
   var data = {
     event: Connection.ACTION_EVENT,

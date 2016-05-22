@@ -57,10 +57,26 @@ Every communication ist in the form:
 ```
 ```javascript
 {
+    event: "cancelGame",
+    payload: {
+        playerId: ""
+    }
+}
+```
+```javascript
+{
     event: "action",
     payload: {
         playerId: "",
         type: "buttonPressed"
+    }
+}
+```
+```javascript
+{
+    event: "giveUp",
+    payload: {
+        playerId: ""
     }
 }
 ```

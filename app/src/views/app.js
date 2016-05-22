@@ -106,10 +106,8 @@ class App extends Component{
             task: data.payload.task,
             lives: data.payload.lives
           })
-          var nextIndex = route.index + 1;
-          navigator.push({
+          navigator.replace({
             name: 'game',
-            index: nextIndex,
           })
         })
         return (
@@ -119,6 +117,10 @@ class App extends Component{
             isHost={this.state.isHost}
             onForward={() => {
               Connection.doStartRound({playerId: this.state.playerId})
+            }}
+            onCancel={() => {
+              Connection.doCancelGame({playerId: this.state.playerId})
+              navigator.pop()
             }}
           />
         )
@@ -141,10 +143,8 @@ class App extends Component{
         })
         Connection.onEndRound((data) => {
           this.setState({loser: data.payload.loser})
-          var nextIndex = route.index + 1;
-          navigator.push({
+          navigator.replace({
             name: 'loser',
-            index: nextIndex,
           })
         })
         return (
@@ -173,6 +173,10 @@ class App extends Component{
             isHost={this.state.isHost}
             onNextRound={() => {
               Connection.doStartRound({playerId: this.state.playerId})
+            }}
+            onGiveUp={() => {
+              Connection.doGiveUp({playerId: this.state.playerId})
+              navigator.pop()
             }}
           />
         )
