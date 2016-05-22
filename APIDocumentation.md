@@ -57,9 +57,10 @@ Every communication ist in the form:
 ```
 ```javascript
 {
-    event: "cancelGame",
+    event: "removeFromGame",
     payload: {
-        playerId: ""
+        playerId: "",
+        gameId: ""
     }
 }
 ```
@@ -69,14 +70,6 @@ Every communication ist in the form:
     payload: {
         playerId: "",
         type: "buttonPressed"
-    }
-}
-```
-```javascript
-{
-    event: "giveUp",
-    payload: {
-        playerId: ""
     }
 }
 ```
