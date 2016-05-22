@@ -10,6 +10,7 @@ import {
 import Button from 'react-native-button'
 import QRCode from 'react-native-qrcode'
 import * as Colors from '../constants/colors'
+import I18n from 'react-native-i18n'
 
 class Lobby extends Component{
   constructor(props){
@@ -25,7 +26,7 @@ class Lobby extends Component{
             value={this.props.gameId}
             size={250}
             bgColor='black'
-            fgColor='#A2BAD1'/>
+            fgColor={Colors.BACKGROUND}/>
         </View>
         <ScrollView
           ref={(scrollView) => { _scrollView = scrollView; }}
@@ -39,7 +40,7 @@ class Lobby extends Component{
             containerStyle={styles.button}
             style={styles.buttonText} 
             onPress={this.onPressCancel}>
-            Cancel
+            {I18n.t('cancel')}
           </Button>
           {this.showStartGameButtonIfNecessery(this.props.isHost)}
         </View>
@@ -60,7 +61,7 @@ class Lobby extends Component{
           containerStyle={styles.button}
           style={styles.buttonText} 
           onPress={this.onPressStartGame}>
-          Start Game
+          {I18n.t('startGame')}
         </Button>
       )
     }

@@ -1,6 +1,7 @@
 package com.pressthebutton;
 
 import com.facebook.react.ReactActivity;
+import com.i18n.reactnativei18n.ReactNativeI18n;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.eguma.barcodescanner.BarcodeScanner;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
@@ -39,6 +40,7 @@ public class MainActivity extends ReactActivity {
     protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new ReactNativeI18n(),
             new VectorIconsPackage(),
             new BarcodeScanner(),
             new RCTCameraPackage(),

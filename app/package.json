@@ -13,6 +13,7 @@
     "react-native-button": "^1.6.0",
     "react-native-camera": "git+https://github.com/lwansbrough/react-native-camera.git",
     "react-native-dismiss-keyboard": "^1.0.0",
+    "react-native-i18n": "0.0.8",
     "react-native-qrcode": "^0.2.0",
     "react-native-vector-icons": "^2.0.2",
     "react-timeout": "^1.0.0"

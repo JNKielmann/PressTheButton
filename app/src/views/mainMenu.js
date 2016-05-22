@@ -7,6 +7,7 @@ import {
 
 import Button from 'react-native-button'
 import * as Colors from '../constants/colors'
+import I18n from 'react-native-i18n'
 
 class MainMenu extends Component{
   constructor(props){
@@ -21,13 +22,13 @@ class MainMenu extends Component{
           containerStyle={styles.button}
           style={styles.buttonText}
           onPress={this.onPressCreateGame}>
-          Create Game
+          {I18n.t('createGame')}
         </Button>
         <Button 
           containerStyle={styles.button}
           style={styles.buttonText} 
           onPress={this.onPressJoinGame}>
-          Join Game
+          {I18n.t('joinGame')}
         </Button>
       </View>
     )

@@ -9,6 +9,7 @@ import {
 import * as Connection from '../network/connector'
 import * as ActionTypes from '../constants/actionTypes'
 import * as FeedbackConstants from '../constants/feedback'
+import * as Translations from '../constants/translations'
 
 import Login from './login'
 import MainMenu from './mainMenu'
@@ -17,11 +18,13 @@ import Game from './game'
 import Loser from './loser'
 import BarcodeScanner from 'react-native-barcodescanner'
 import ReactTimeout from 'react-timeout/native'
+import I18n from 'react-native-i18n'
 
 class App extends Component{
   constructor(props){
     super(props)
     Connection.init()
+    Translations.init()
     this.renderScene = this.renderScene.bind(this)
     this.turnOffValidTurn = this.turnOffValidTurn.bind(this)
     this.turnOffInvalidTurn = this.turnOffInvalidTurn.bind(this)

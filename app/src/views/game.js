@@ -81,6 +81,7 @@ var styles = StyleSheet.create({
     marginTop: 50
   },
   task: {
+    textAlign: 'center',
     fontSize: 40
   },
   buttonArea: {

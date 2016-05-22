@@ -10,6 +10,7 @@ import {
 import Button from 'react-native-button'
 import dismissKeyboard from 'react-native-dismiss-keyboard'
 import * as Colors from '../constants/colors'
+import I18n from 'react-native-i18n'
 
 class Login extends Component{
   constructor(props){
@@ -24,7 +25,7 @@ class Login extends Component{
     return (
       <View style={styles.container}>
           <Text style={styles.text}>
-            What is your name?
+            {I18n.t('whatIsYourName')}
           </Text>
         <View style={styles.formular}>
           <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>

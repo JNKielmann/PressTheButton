@@ -8,6 +8,7 @@ import {
 
 import Button from 'react-native-button'
 import * as Colors from '../constants/colors'
+import I18n from 'react-native-i18n'
 
 class Loser extends Component{
   constructor(props){
@@ -18,13 +19,13 @@ class Loser extends Component{
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>{this.props.loser} lost this round!</Text>
+        <Text style={styles.text}>{this.props.loser}{I18n.t('lostRound')}</Text>
         {this.showNextRoundButtonIfNecessery(this.props.isHost)}
         <Button 
           containerStyle={[styles.button, styles.buttonGiveUp]}
           style={styles.buttonText} 
           onPress={this.onPressGiveUp}>
-          Give Up
+          {I18n.t('giveUp')}
         </Button>
       </View>
     )
@@ -36,7 +37,7 @@ class Loser extends Component{
           containerStyle={styles.button}
           style={styles.buttonText} 
           onPress={this.onPressNextRound}>
-          Next Round
+          {I18n.t('nextRound')}
         </Button>
       )
     }
@@ -53,6 +54,7 @@ var styles = StyleSheet.create({
   text: {
     marginTop: 200,
     fontSize: 30,
+    textAlign: 'center',
     color: Colors.LOGIN_INFO_TEXT
   },
   buttonText: {
