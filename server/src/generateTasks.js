@@ -23,7 +23,9 @@ import { randomArrayElement, randomButtonColor, randomButtonText } from './state
 function testMyState(player, tester) {
   return (state) => {
     const myState = state.playerStates.find(ps => ps.playerId === player.id)
-    return tester(myState)
+    if (myState) { // TODO: Should never be null
+      return tester(myState)
+    }
   }
 }
 function testAtLeastNStates(n, tester) {
@@ -50,32 +52,38 @@ function testAtLeastNButtonTexts(n, text) {
 
 
 
-function randomMyButtonColorTask({ player }) {
+function randomMyButtonColorTask({ currentPlayer }) {
   const buttonColor = randomButtonColor()
-  const taskDescription = `Press when your button has the color ${buttonColor}`
-  const tester = testMyButtonColor(player, buttonColor)
-  return new Task(taskDescription, tester)
+  const pressWhen = `your button has the color ${buttonColor}`
+  const tester = testMyButtonColor(currentPlayer, buttonColor)
+  return new Task(pressWhen, tester)
 }
-function randomMyButtonTextTask({ player }) {
+function randomMyButtonTextTask({ currentPlayer }) {
   const buttonText = randomButtonText()
-  const taskDescription = `Press when your button has ${buttonText} written on it`
-  const tester = testMyButtonText(player, buttonText)
-  return new Task(taskDescription, tester)
+  const pressWhen = `your button has ${buttonText} written on it`
+  const tester = testMyButtonText(currentPlayer, buttonText)
+  return new Task(pressWhen, tester)
 }
-function randomAtLeastNButtonColorsTask({ numPlayer }) {
+function randomAtLeastNButtonColorsTask({ numPlayers }) {
   const buttonColor = randomButtonColor()
-  const n = 2 + Math.floor(Math.random() * (numPlayer - 1))
-  const taskDescription = `Press when at least ${n} buttons have the color ${buttonColor}`
+  let n = 0
+  if (numPlayers <= 4) {
+    n = 2
+  } else {
+    n = Math.floor(Math.random() * 2) + 1
+  }
+  const pressWhen = `at least ${n} buttons have the color ${buttonColor}`
   const tester = testAtLeastNButtonColors(n, buttonColor)
-  return new Task(taskDescription, tester)
+  return new Task(pressWhen, tester)
 }
-function randomAtLeastNButtonTextsTask({ numPlayer }) {
+function randomAtLeastNButtonTextsTask({ numPlayers }) {
   const buttonText = randomButtonText()
-  const n = 2 + Math.floor(Math.random() * (numPlayer - 1))
-  const taskDescription = `Press when at least ${n} buttons have ${buttonText} written on them`
-  const tester = testAtLeastNButtonColors(n, buttonText)
-  return new Task(taskDescription, tester)
+  const n = 2 + Math.floor(Math.random() * (numPlayers - 1))
+  const pressWhen = `at least ${n} buttons have ${buttonText} written on them`
+  const tester = testAtLeastNButtonTexts(n, buttonText)
+  return new Task(pressWhen, tester)
 }
+
 
 const taskCreators = [
   randomMyButtonColorTask,

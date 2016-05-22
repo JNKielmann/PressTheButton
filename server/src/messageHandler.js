@@ -47,7 +47,7 @@ export const messageHandler = {
     game.forEachPlayer((p) => {
       p.lives = 3
       p.emit('startRound', {
-        task: task.text,
+        task: p.task.text,
         lives: p.lives,
       })
     })
@@ -56,7 +56,10 @@ export const messageHandler = {
   action: (player, payload) => {
     const game = player.game
     if (payload.type === 'buttonPressed') {
+      console.dir(game.state)
       if (player.task.isValidPress(game.state)) {
+        console.log('valid turn')
+        player.hasPressed = true
         player.emit('validTurn', {})
       } else {
         player.failedPress()

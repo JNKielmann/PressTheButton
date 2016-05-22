@@ -10,8 +10,8 @@ const server = http.createServer((request, response) => {
   response.writeHead(404)
   response.end()
 })
-server.listen(8080, () => {
-  console.log('Server is listening on port 8080')
+server.listen(8085, () => {
+  console.log('Server is listening on port 8085')
 })
 
 const wsServer = new WebSocketServer({
