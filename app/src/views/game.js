@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
-  View,
   TouchableHighlight,
   Text,
+  View,
   Image,
   LayoutAnimation,
   BackAndroid
@@ -15,10 +15,17 @@ import Color from 'color'
 import * as Colors from '../constants/colors'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ReactTimeout from 'react-timeout/native'
+import * as Animatable from 'react-native-animatable'
+
 
 class Game extends Component{
   componentWillMount() {
     LayoutAnimation.spring()
+  }
+  componentWillReceiveProps(obj) {
+    if(this.refs.button){
+      this.refs.button.shake(100)
+    }
   }
   constructor(props) {
     super(props)
@@ -36,7 +43,6 @@ class Game extends Component{
     })
   }
   render() {
-    var buttonTextColor = this.calcButtonTextColor(this.props.gameData.buttonColor)
     var hearts = []
     for(var i=0;i<this.props.lives;i++){
       hearts.push(<Icon key={'live'+i} style={{padding:4}} name="heart" size={30} color="#FF0002" />)
@@ -53,15 +59,21 @@ class Game extends Component{
     if(!this.state.onlyTaskView) {
       var buttonText
       var buttonColor
+      var viewRef
       if(this.state.countdown>0){
         buttonText = this.state.countdown
         buttonColor = Colors.COUNTDOWN_BUTTON
+        viewRef = 'countDown'
       } else {
         buttonText = this.props.gameData.buttonText
         buttonColor = this.props.gameData.buttonColor
+        viewRef = 'button'
       }
       views.push(
-        <View key='buttonArea' style={styles.buttonArea}>
+        <Animatable.View 
+          ref={viewRef}
+          key='buttonArea' 
+          style={styles.buttonArea}>
           <TouchableHighlight 
             style={{
               borderRadius: 250,
@@ -73,14 +85,14 @@ class Game extends Component{
                 <Text 
                   style={
                     [
-                      {color: buttonTextColor},
+                      {color: this.calcButtonTextColor(buttonColor)},
                       styles.buttonText
                     ]}>
                   {buttonText}
                 </Text>
             </View>
           </TouchableHighlight>
-        </View>)
+        </Animatable.View>)
       views.push(
         <View key='livesArea' style={styles.lives}>
           {hearts}
