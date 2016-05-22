@@ -51,7 +51,7 @@ class Login extends Component{
     if(nameWithoutSpaces !== "") {
       this.props.onForward(nameWithoutSpaces)
     }else{
-      this.showErrorMessage('Enter a valid name you bastard!')
+      this.showErrorMessage(I18n.t('invalidNameMessage'))
     }
   }
   showErrorMessage(errorMessage) {
@@ -63,7 +63,8 @@ var styles = StyleSheet.create({
   formular: {
   },
   errorMessage: {
-    color: Colors.ERROR_MESSAGE
+    color: Colors.ERROR_MESSAGE,
+    textAlign: 'center'
   },
   text: {
     marginBottom: 40,

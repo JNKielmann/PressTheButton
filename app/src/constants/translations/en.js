@@ -6,5 +6,6 @@ export default {
     startGame: 'Start Game',
     lostRound: ' lost this round!',
     nextRound: 'Next Round',
-    giveUp: 'Give Up'
+    giveUp: 'Give Up',
+    invalidNameMessage: 'Invalid Name'
   }
