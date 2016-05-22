@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 import Button from 'react-native-button'
+import dismissKeyboard from 'react-native-dismiss-keyboard'
 import * as Colors from '../constants/colors'
 
 class Login extends Component{
@@ -31,6 +32,7 @@ class Login extends Component{
             style={styles.inputField}
             onChangeText={(name) => this.setState({name})}
             value={this.state.name}
+            onSubmitEditing={this.onPressLogin}
           />
         </View>
         <Button 
@@ -43,6 +45,7 @@ class Login extends Component{
     )
   }
   onPressLogin() {
+    dismissKeyboard()
     var nameWithoutSpaces = this.state.name.trim()
     if(nameWithoutSpaces !== "") {
       this.props.onForward(nameWithoutSpaces)
