@@ -7,5 +7,6 @@ export default {
     lostRound: ' hat die Runde verloren!',
     nextRound: 'Nächste Runde',
     giveUp: 'Aufgeben',
-    invalidNameMessage: 'Ungültiger Name'
+    invalidNameMessage: 'Ungültiger Name',
+    taskHeader: 'Drücke den Knopf wenn'
   }
