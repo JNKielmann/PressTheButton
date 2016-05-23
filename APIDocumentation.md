@@ -95,8 +95,11 @@ Every communication ist in the form:
 {
     event: "updateGameState",
     payload: {
-        buttonColor: "#FFFFFF",
-        buttonText: "blue"
+        turnDuration: 1500, //in ms
+        state:{ 
+            buttonColor: "#FFFFFF",
+            buttonText: "blue"
+        }
     }
 }
 ```
@@ -118,7 +121,10 @@ Every communication ist in the form:
 {
     event: "endRound",
     payload: {
-        loser: "Name"
+        loserName: "Name",
+        loserId: "",
+        flashScreen: true,
+        notPressed: true
     }
 }
 ```
