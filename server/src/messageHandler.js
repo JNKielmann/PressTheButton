@@ -45,7 +45,7 @@ export const messageHandler = {
     }
     generateTasks(game)
     game.forEachPlayer((p) => {
-      p.lives = 3
+      p.lives = 1
       p.emit('startRound', {
         task: p.task.text,
         lives: p.lives,
@@ -56,13 +56,13 @@ export const messageHandler = {
   action: (player, payload) => {
     const game = player.game
     if (payload.type === 'buttonPressed') {
-      console.dir(game.state)
-      if (player.task.isValidPress(game.state)) {
+      const result = player.task.validatePress(game.state)
+      if (result.pressCorrect) {
         console.log('valid turn')
         player.hasPressed = true
         player.emit('validTurn', {})
       } else {
-        player.failedPress()
+        player.failedPress([player.id], false)
       }
     }
   },
@@ -78,7 +78,7 @@ export const messageHandler = {
       p.emit('playerList', { players: playerNames })
     })
     console.log('Player removed')
-    if(game.getPlayerNames().length == 0) {
+    if (game.getPlayerNames().length === 0) {
       game.stopGameLoop()
       delete currentGames[payload.gameId]
       console.log('Game deleted')

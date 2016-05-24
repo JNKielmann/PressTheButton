@@ -14,7 +14,7 @@ export class Game {
   }
   removePlayer(player) {
     var index = this.players.indexOf(player)
-    if(index > -1) {
+    if (index > -1) {
       this.players.splice(index, 1)
     }
   }
@@ -24,11 +24,18 @@ export class Game {
   forEachPlayer(callback) {
     return this.players.forEach(callback)
   }
-  endRound(loserName) {
+  endRound(losingPlayer, involvedPlayerIds, notPressed) {
+    console.log('Round Endend')
     this.forEachPlayer((p) => {
-      p.emit('endRound', {
-        loser: loserName,
-      })
+      const payload = {
+        loser: losingPlayer.name,
+        loserId: losingPlayer.id,
+        flashScreen: involvedPlayerIds.indexOf(p.id) > -1,
+        notPressed,
+      }
+      console.log(`send player ${p.id}:`)
+      console.dir(payload)
+      p.emit('endRound', payload)
     })
     this.stopGameLoop()
   }
@@ -37,40 +44,62 @@ export class Game {
   }
   startGameLoop() {
     console.log('New Gameloop started')
-    this.roundIsRunning = true
-    this.loopCounter = 0
-    let timeTillNextLoop = 0
-    this.state = {
-      playerStates: [],
-    }
+    this.initGameLoop()
     const gameLoop = () => {
+      this.testForMissedPress()
       if (!this.roundIsRunning) {
         return
       }
-      if (this.state && this.state.playerStates.length > 0) {
-        this.forEachPlayer((p) => {
-          if (!p.hasPressed && p.task.isValidPress(this.state)) {
-            p.failedPress()
-          }
-        })
-      }
-
-      this.state = {
-        playerStates: [],
-      }
-      this.forEachPlayer((p) => {
-        p.hasPressed = false
-        if (this.state.playerStates.length === 0 || Math.random() < 0.7) {
-          const playerState = this.generateRandomPlayerState()
-          this.state.playerStates.push(Object.assign(playerState, { playerId: p.id }))
-          p.emit('updateGameState', playerState)
-        }
-      })
-      timeTillNextLoop = this.computeNextLoopTime()
-      this.timeout = setTimeout(gameLoop, timeTillNextLoop)
+      this.timeTillNextLoop = this.computeNextLoopTime()
+      this.setNextState(this.timeTillNextLoop)
+      this.timeout = setTimeout(gameLoop, this.timeTillNextLoop)
       ++this.loopCounter
     }
-    gameLoop()
+    this.timeout = setTimeout(gameLoop, this.timeTillNextLoop)
+  }
+
+  /**
+   * @private
+   */
+  initGameLoop() {
+    this.roundIsRunning = true
+    this.loopCounter = 0
+    this.timeTillNextLoop = this.computeNextLoopTime()
+    this.setNextState(this.timeTillNextLoop) // initial State
+  }
+  /**
+   * @private
+   */
+  testForMissedPress() {
+    this.forEachPlayer((p) => {
+      if (!p.hasPressed) {
+        const result = p.task.validatePress(this.state)
+        if (result.pressCorrect) {
+          p.failedPress(result.involvedPlayerIds, true)
+        }
+      }
+    })
+  }
+  /**
+   * @private
+   */
+  setNextState(turnDuration) {
+    this.state = {
+      playerStates: [],
+    }
+    this.forEachPlayer((p) => {
+      p.hasPressed = false
+      // if (this.state.playerStates.length === 0 || Math.random() < 0.7) {
+      const playerState = this.generateRandomPlayerState()
+      this.state.playerStates.push(Object.assign(playerState, { playerId: p.id }))
+      p.emit('updateGameState', {
+        turnDuration,
+        state: playerState,
+      })
+      // }
+    })
+    console.log('State is: ')
+    console.dir(this.state)
   }
 
   /**

@@ -1,6 +1,5 @@
 import http from 'http'
 import { server as WebSocketServer } from 'websocket'
-import uuid from 'node-uuid'
 
 import { Player } from './player'
 import { messageHandler } from './messageHandler'
@@ -35,8 +34,7 @@ wsServer.on('request', (request) => {
         console.log('No payload provided')
         return
       }
-      console.log(messageHandler)
-      if(messageHandler[data.event]) {
+      if (messageHandler[data.event]) {
         messageHandler[data.event](player, data.payload)
       }
     }

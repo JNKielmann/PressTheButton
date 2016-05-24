@@ -18,12 +18,12 @@ export class Player {
     this.game = game
     game.addPlayer(this)
   }
-  failedPress() {
+  failedPress(involvedPlayerIds, notPressed) {
     --this.lives
     console.log('player lost live')
     this.emit('invalidTurn', { lives: this.lives })
     if (this.lives <= 0) {
-      this.game.endRound(this.name)
+      this.game.endRound(this, involvedPlayerIds, notPressed)
     }
   }
 }

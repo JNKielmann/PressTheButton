@@ -10,7 +10,7 @@ export class Task {
     this.tester = state => !oldTester(state)
     this.text = `Press not when ${this.pressWhenText}`
   }
-  isValidPress(state) {
+  validatePress(state) {
     return this.tester(state)
   }
 }

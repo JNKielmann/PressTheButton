@@ -24,16 +24,25 @@ function testMyState(player, tester) {
   return (state) => {
     const myState = state.playerStates.find(ps => ps.playerId === player.id)
     if (myState) { // TODO: Should never be null
-      return tester(myState)
+      return {
+        pressCorrect: tester(myState),
+        involvedPlayerIds: [player.id],
+      }
     }
   }
 }
 function testAtLeastNStates(n, tester) {
   return (state) => {
-    const totalCount = state.playerStates.reduce((currCount, playerState) => {
-      return tester(playerState) ? currCount + 1 : currCount
-    }, 0)
-    return totalCount >= n
+    const involvedPlayerIds = []
+    let totalCount = 0
+    state.playerStates.filter(tester).forEach((playerState) => {
+      ++totalCount
+      involvedPlayerIds.push(playerState.playerId)
+    })
+    return {
+      pressCorrect: totalCount >= n,
+      involvedPlayerIds,
+    }
   }
 }
 
@@ -70,7 +79,7 @@ function randomAtLeastNButtonColorsTask({ numPlayers }) {
   if (numPlayers <= 4) {
     n = 2
   } else {
-    n = Math.floor(Math.random() * 2) + 1
+    n = Math.floor(Math.random() * 2) + 2
   }
   const pressWhen = `at least ${n} buttons have the color ${buttonColor}`
   const tester = testAtLeastNButtonColors(n, buttonColor)
