@@ -38,15 +38,16 @@ class App extends Component{
       gameData: {},
       task: '',
       lives: 0,
-      loser: '',
+      loserName: '',
       validTurn: false,
       invalidTurn: false,
       roundEnded: false,
       loserId: '',
-      screenFlashes: false,
+      flashScreen: false,
       notPressed: false,
-      duration: 0,
-      newGameState: false
+      turnDuration: 0,
+      newGameState: false,
+      timeTillStart: 0
     }
   }
   render() {
@@ -94,7 +95,7 @@ class App extends Component{
             players={this.state.players}
             isHost={this.state.isHost}
             onForward={() => {
-              Connection.doStartRound({playerId: this.state.playerId})
+              Connection.doStartRound({ playerId: this.state.playerId })
             }}
             onCancel={() => {
               Connection.doRemoveFromGame(
@@ -114,12 +115,14 @@ class App extends Component{
             lives={this.state.lives}
             validTurn={this.state.validTurn}
             invalidTurn={this.state.invalidTurn}
-            loser={this.state.loser}
+            loserName={this.state.loserName}
             loserId={this.state.loserId}
-            screenFlashes={this.state.screenFlashes}
+            flashScreen={this.state.flashScreen}
             notPressed={this.state.notPressed}
-            duration={this.state.duration}
+            turnDuration={this.state.turnDuration}
             newGameState={this.state.newGameState}
+            roundEnded={this.state.roundEnded}
+            timeTillStart={this.state.timeTillStart}
             onPressButton={()=>this.onPressButton()}
             onButtonAnimated={()=>this.onButtonAnimated()}
           />
@@ -200,7 +203,13 @@ class App extends Component{
     Connection.onStartRound((data) => {
       this.setState({
         task: data.payload.task,
-        lives: data.payload.lives
+        lives: data.payload.lives,
+        loserId: '',
+        loserName: '',
+        flashScreen: false,
+        notPressed: false,
+        roundEnded: false,
+        timeTillStart: data.payload.timeTillStart
       })
       this.refs.navigator.replace({
         name: 'game',
@@ -218,8 +227,8 @@ class App extends Component{
     })
     Connection.onUpdateGameState((data) => {
       this.setState({
-        gameData: data.payload,
-        duration: 3000,
+        gameData: data.payload.state,
+        turnDuration: data.payload.turnDuration,
         newGameState: true
       })
     })
@@ -238,9 +247,9 @@ class App extends Component{
       this.setState(
         {
           roundEnded: true,
-          loser: data.payload.loser,
-          screenFlashes: data.payload.screenFlashes,
+          loserName: data.payload.loserName,
           loserId: data.payload.loserId,
+          flashScreen: data.payload.flashScreen,
           notPressed: data.payload.notPressed
         })
     })

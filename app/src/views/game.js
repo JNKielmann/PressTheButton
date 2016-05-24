@@ -3,6 +3,7 @@ import {
   AppRegistry,
   StyleSheet,
   View,
+  Text,
   LayoutAnimation
 } from 'react-native';
 
@@ -12,6 +13,7 @@ import Fuse from '../components/fuse'
 import * as Colors from '../constants/colors'
 import * as Feedback from '../constants/feedback'
 import ReactTimeout from 'react-timeout/native'
+import I18n from 'react-native-i18n'
 
 class Game extends Component{
   componentWillMount() {
@@ -46,6 +48,9 @@ class Game extends Component{
     if(this.props.validTurn) {
       feedbackStyle.backgroundColor = Colors.FEEDBACK_VALID
     }
+    if(this.props.roundEnded && this.props.flashScreen) {
+      //TODO: flash background after a timeout
+    }
     var views = []
     var justifyContent
     if(!this.state.onlyTaskView) {
@@ -71,11 +76,14 @@ class Game extends Component{
           animated={this.state.buttonShouldAnimate}
           onPressButton={this.props.onPressButton}
         />)
-      views.push(<Fuse key='fuse' duration={this.props.duration}/>)
+      views.push(<Fuse key='fuse' duration={this.props.turnDuration}/>)
       justifyContent = 'space-between'
     } else {
       justifyContent = 'center'
-      this.props.setTimeout(this.showAllItems, 1000)
+      this.props.setTimeout(this.showAllItems, this.props.timeTillStart - 3000)
+    }
+    if(this.props.roundEnded && !this.state.removeLostScreen) {
+      //TODO: show popup, that removes after a few seconds
     }
 
     return (
@@ -90,7 +98,7 @@ class Game extends Component{
     var nextCountdownState = this.state.countdown - 1
     this.setState({ countdown: nextCountdownState })
     if(nextCountdownState>0) {
-      this.props.setTimeout(this.decrementCountdown, 500)
+      this.props.setTimeout(this.decrementCountdown, 1000)
     } else {
       this.setState({ countdownEnded: true })
     }
@@ -100,12 +108,16 @@ class Game extends Component{
     this.setState({ onlyTaskView: false })
     if(!this.state.countdownStarted){
       this.setState({ countdownStarted: true })
-      this.props.setTimeout(this.decrementCountdown, 500)
+      this.props.setTimeout(this.decrementCountdown, 1000)
     }
   }
 }
 
 var styles = StyleSheet.create({
+  loserView: {
+    position: 'absolute',
+    top: 200
+  },
   container: {
     flex: 1,
     alignItems: 'center',
