@@ -2,125 +2,94 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
-  TouchableHighlight,
-  Text,
   View,
-  Image,
-  LayoutAnimation,
-  BackAndroid
+  Text,
+  LayoutAnimation
 } from 'react-native';
 
-import Button from 'react-native-button'
-import Color from 'color'
+import Button from '../components/button'
+import TaskView from '../components/taskView'
+import Fuse from '../components/fuse'
 import * as Colors from '../constants/colors'
-import Icon from 'react-native-vector-icons/FontAwesome'
+import * as Feedback from '../constants/feedback'
 import ReactTimeout from 'react-timeout/native'
-import * as Animatable from 'react-native-animatable'
-
+import I18n from 'react-native-i18n'
 
 class Game extends Component{
   componentWillMount() {
     LayoutAnimation.spring()
   }
   componentWillReceiveProps(obj) {
-    if(this.refs.button){
-      this.refs.button.shake(100)
+    if(obj.newGameState){
+      this.setState({ buttonShouldAnimate: true })
+    } else {
+      this.setState({ buttonShouldAnimate: false })
+    }
+  }
+  componentDidUpdate(prevProps, props) {
+    if(this.state.buttonShouldAnimate) {
+      this.props.onButtonAnimated()
     }
   }
   constructor(props) {
     super(props)
-    this.onPressButton = this.onPressButton.bind(this)
     this.showAllItems = this.showAllItems.bind(this)
     this.decrementCountdown = this.decrementCountdown.bind(this)
     this.state = {
       onlyTaskView: true,
       countdown: 3,
       countdownStarted: false,
-      countdownEnded: false
+      countdownEnded: false,
+      buttonShouldAnimate: false
     }
-    BackAndroid.addEventListener('hardwareBackPress', function() {
-      return true
-    })
   }
   render() {
-    var hearts = []
-    for(var i=0;i<this.props.lives;i++){
-      hearts.push(<Icon key={'live'+i} style={{padding:4}} name="heart" size={30} color="#FF0002" />)
-    }
     var feedbackStyle = {}
     if(this.props.validTurn) {
       feedbackStyle.backgroundColor = Colors.FEEDBACK_VALID
     }
-    if(this.props.invalidTurn) {
-      feedbackStyle.backgroundColor = Colors.FEEDBACK_INVALID
+    if(this.props.roundEnded && this.props.flashScreen) {
+      //TODO: flash background after a timeout
     }
     var views = []
     var justifyContent
     if(!this.state.onlyTaskView) {
       var buttonText
       var buttonColor
-      var viewRef
       var buttonText180
       if(this.state.countdown>0){
         buttonText = this.state.countdown
         buttonColor = Colors.COUNTDOWN_BUTTON
-        viewRef = 'countDown'
+        buttonText180 = false
       } else {
         buttonText = this.props.gameData.buttonText
         buttonColor = this.props.gameData.buttonColor
-        viewRef = 'button'
-        buttonText180 = (
-          <Text 
-            style={
-              [
-                {transform: [{rotate: '180deg'}]},
-                {color: this.calcButtonTextColor(buttonColor)},
-                styles.buttonText
-              ]}>
-            {buttonText}
-          </Text>)
+        buttonText180 = true
       }
-      
       views.push(
-        <Animatable.View 
-          ref={viewRef}
-          key='buttonArea' 
-          style={styles.buttonArea}>
-          <TouchableHighlight 
-            style={{
-              borderRadius: 250,
-              overflow: 'hidden'
-            }} 
-            disabled={!this.state.countdownEnded}
-            onPress={this.onPressButton}>
-            <View style={[styles.button,{backgroundColor: buttonColor}]}>
-                {buttonText180}
-                <Text 
-                  style={
-                    [
-                      {color: this.calcButtonTextColor(buttonColor)},
-                      styles.buttonText
-                    ]}>
-                  {buttonText}
-                </Text>
-            </View>
-          </TouchableHighlight>
-        </Animatable.View>)
-      views.push(
-        <View key='livesArea' style={styles.lives}>
-          {hearts}
-        </View>)
+        <Button 
+          key='button'
+          disabled={!this.state.countdownEnded}
+          color={buttonColor}
+          text={buttonText}
+          text180={buttonText180}
+          animated={this.state.buttonShouldAnimate}
+          onPressButton={this.props.onPressButton}
+        />)
+      views.push(<Fuse key='fuse' duration={this.props.turnDuration}/>)
       justifyContent = 'space-between'
     } else {
       justifyContent = 'center'
-      this.props.setTimeout(this.showAllItems, 3000)
+      this.props.setTimeout(this.showAllItems, this.props.timeTillStart - 3000)
+    }
+    if(this.props.roundEnded && !this.state.removeLostScreen) {
+      //TODO: show popup, that removes after a few seconds
     }
 
     return (
-      <View style={[styles.container, {justifyContent: justifyContent}, feedbackStyle]}>
-        <View style={[styles.taskView, this.state.taskViewStyle]}>
-          <Text style={styles.task}>{this.props.task}</Text>
-        </View>
+      <View 
+        style={[styles.container, {justifyContent: justifyContent}, feedbackStyle]}>
+        <TaskView task={this.props.task} />
         {views}
       </View>
     )
@@ -142,60 +111,18 @@ class Game extends Component{
       this.props.setTimeout(this.decrementCountdown, 1000)
     }
   }
-  calcButtonTextColor(buttonColor) {
-    if(!buttonColor) {
-      return Colors.COUNTDOWN_TEXT
-    }
-    var color = Color(buttonColor)
-    return color.negate().rgbString()
-  }
-  onPressButton() {
-    this.props.onPressButton()
-  }
 }
 
 var styles = StyleSheet.create({
-  lives: {
-    marginLeft: 20,
-    marginBottom: 15,
-    alignSelf: 'flex-start',
-    flexDirection: 'row'
-  },
-  taskView: {
-    marginTop: 50
-  },
-  task: {
-    textAlign: 'center',
-    fontSize: 40
-  },
-  buttonArea: {
-  },
-  buttonText: {
-    fontSize: 60,
-    fontWeight: 'bold',
-    textAlign: 'center'
-  },
-  button: {
-    width: 250,
-    height: 250,
-    borderWidth: 2,
-    borderRadius: 250,
-    overflow: 'hidden',
-    justifyContent: 'center'
+  loserView: {
+    position: 'absolute',
+    top: 200
   },
   container: {
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: Colors.BACKGROUND
-  },
-  inputField: {
-    padding: 5,
-    borderWidth: 2,
-    width: 200,
-    height: 40,
-    fontSize: 18,
-    textAlign: 'center',
-    color: Colors.INPUT_FIELD_TEXT
   },
 })
 

@@ -13,6 +13,7 @@ import {
 
 
 import App from './src/views/app'
+import Fuse from './src/components/fuse'
 
 class PressTheButton extends Component {
   constructor(props) {

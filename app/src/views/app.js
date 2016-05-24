@@ -28,6 +28,7 @@ class App extends Component{
     this.renderScene = this.renderScene.bind(this)
     this.turnOffValidTurn = this.turnOffValidTurn.bind(this)
     this.turnOffInvalidTurn = this.turnOffInvalidTurn.bind(this)
+    this.initializeEventListeners()
     this.state = {
       name: '',
       gameId: '',
@@ -37,23 +38,28 @@ class App extends Component{
       gameData: {},
       task: '',
       lives: 0,
-      loser: '',
+      loserName: '',
       validTurn: false,
-      invalidTurn: false
+      invalidTurn: false,
+      roundEnded: false,
+      loserId: '',
+      flashScreen: false,
+      notPressed: false,
+      turnDuration: 0,
+      newGameState: false,
+      timeTillStart: 0
     }
   }
   render() {
     return (
       <Navigator
-        initialRoute={{name: 'login', index: 0}}
+        ref='navigator'
+        initialRoute={{name: 'login'}}
         renderScene={this.renderScene}
       />
     )
   }
   renderScene(route, navigator) {
-    Connection.onError((data) => {
-      this.showErrorMessage(data, navigator)
-    })
     switch(route.name) {
       case 'login':
         return (
@@ -61,10 +67,8 @@ class App extends Component{
             onForward={(name) => {
               this.setState({name: name})
               Connection.doLogin({name: name})
-              var nextIndex = route.index + 1;
               navigator.push({
-                name: 'mainMenu',
-                index: nextIndex,
+                name: 'mainMenu'
               })
             }}
           />
@@ -73,53 +77,25 @@ class App extends Component{
         return (
           <MainMenu
             onCreateGame={() => {
-              Connection.onCreateGame((data) => {
-                this.setState({
-                  playerId: data.payload.playerId,
-                  gameId: data.payload.gameId,
-                  isHost: true
-                })
-                var nextIndex = route.index + 1;
-                navigator.push({
-                  name: 'lobby',
-                  index: nextIndex,
-                })
-              })
               Connection.doCreateGame({
                 name: this.state.name
               })
             }}
             onReadQRCode={() => {
-              var nextIndex = route.index + 1;
               navigator.push({
-                name: 'qrCodeReader',
-                index: nextIndex,
+                name: 'qrCodeReader'
               })
             }}
           />
         )
       case 'lobby':
-        Connection.onPlayerList((data) => {
-          this.setState({
-            players: data.payload.players
-          })
-        })
-        Connection.onStartRound((data) => {
-          this.setState({
-            task: data.payload.task,
-            lives: data.payload.lives
-          })
-          navigator.replace({
-            name: 'game',
-          })
-        })
         return (
           <Lobby
             gameId={this.state.gameId}
             players={this.state.players}
             isHost={this.state.isHost}
             onForward={() => {
-              Connection.doStartRound({playerId: this.state.playerId})
+              Connection.doStartRound({ playerId: this.state.playerId })
             }}
             onCancel={() => {
               Connection.doRemoveFromGame(
@@ -132,28 +108,6 @@ class App extends Component{
           />
         )
       case 'game':
-        Connection.onUpdateGameState((data) => {
-          this.setState({
-            gameData: data.payload
-          })
-        })
-        Connection.onValidTurn((data) => {
-          this.setState({validTurn: true})
-          this.props.setTimeout(this.turnOffValidTurn, FeedbackConstants.FEEDBACK_TIME)
-        })
-        Connection.onInvalidTurn((data) => {
-          this.setState({
-            lives: data.payload.lives,
-            invalidTurn: true
-          })
-          this.props.setTimeout(this.turnOffInvalidTurn, FeedbackConstants.FEEDBACK_TIME)
-        })
-        Connection.onEndRound((data) => {
-          this.setState({loser: data.payload.loser})
-          navigator.replace({
-            name: 'loser',
-          })
-        })
         return (
           <Game 
             gameData={this.state.gameData}
@@ -161,7 +115,16 @@ class App extends Component{
             lives={this.state.lives}
             validTurn={this.state.validTurn}
             invalidTurn={this.state.invalidTurn}
+            loserName={this.state.loserName}
+            loserId={this.state.loserId}
+            flashScreen={this.state.flashScreen}
+            notPressed={this.state.notPressed}
+            turnDuration={this.state.turnDuration}
+            newGameState={this.state.newGameState}
+            roundEnded={this.state.roundEnded}
+            timeTillStart={this.state.timeTillStart}
             onPressButton={()=>this.onPressButton()}
+            onButtonAnimated={()=>this.onButtonAnimated()}
           />
         )
       case 'qrCodeReader':
@@ -205,6 +168,9 @@ class App extends Component{
             message,
           )
   }
+  onButtonAnimated() {
+    this.setState({newGameState: false})
+  }
   onPressButton() {
     Connection.doAction(
       {
@@ -223,6 +189,69 @@ class App extends Component{
     )
     navigator.replace({
       name: 'lobby',
+    })
+  }
+  initializeEventListeners() {
+    Connection.onError((data) => {
+      this.showErrorMessage(data, navigator)
+    })
+    Connection.onPlayerList((data) => {
+      this.setState({
+        players: data.payload.players
+      })
+    })
+    Connection.onStartRound((data) => {
+      this.setState({
+        task: data.payload.task,
+        lives: data.payload.lives,
+        loserId: '',
+        loserName: '',
+        flashScreen: false,
+        notPressed: false,
+        roundEnded: false,
+        timeTillStart: data.payload.timeTillStart
+      })
+      this.refs.navigator.replace({
+        name: 'game',
+      })
+    })
+    Connection.onCreateGame((data) => {
+      this.setState({
+        playerId: data.payload.playerId,
+        gameId: data.payload.gameId,
+        isHost: true
+      })
+      this.refs.navigator.push({
+        name: 'lobby'
+      })
+    })
+    Connection.onUpdateGameState((data) => {
+      this.setState({
+        gameData: data.payload.state,
+        turnDuration: data.payload.turnDuration,
+        newGameState: true
+      })
+    })
+    Connection.onValidTurn((data) => {
+      this.setState({validTurn: true})
+      this.props.setTimeout(this.turnOffValidTurn, FeedbackConstants.FEEDBACK_TIME)
+    })
+    Connection.onInvalidTurn((data) => {
+      this.setState({
+        lives: data.payload.lives,
+        invalidTurn: true
+      })
+      this.props.setTimeout(this.turnOffInvalidTurn, FeedbackConstants.FEEDBACK_TIME)
+    })
+    Connection.onEndRound((data) => {
+      this.setState(
+        {
+          roundEnded: true,
+          loserName: data.payload.loserName,
+          loserId: data.payload.loserId,
+          flashScreen: data.payload.flashScreen,
+          notPressed: data.payload.notPressed
+        })
     })
   }
 }
