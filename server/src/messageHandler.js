@@ -43,15 +43,17 @@ export const messageHandler = {
       console.log('Client is not in a game and tried to start a round')
       return
     }
+    const timeTillStart = 6000
     generateTasks(game)
     game.forEachPlayer((p) => {
       p.lives = 1
       p.emit('startRound', {
         task: p.task.text,
         lives: p.lives,
+        timeTillStart,
       })
     })
-    game.startGameLoop()
+    setTimeout(() => game.startGameLoop(), timeTillStart)
   },
   action: (player, payload) => {
     const game = player.game
