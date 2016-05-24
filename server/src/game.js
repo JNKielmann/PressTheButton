@@ -28,7 +28,7 @@ export class Game {
     console.log('Round Endend')
     this.forEachPlayer((p) => {
       const payload = {
-        loser: losingPlayer.name,
+        loserName: losingPlayer.name,
         loserId: losingPlayer.id,
         flashScreen: involvedPlayerIds.indexOf(p.id) > -1,
         notPressed,
