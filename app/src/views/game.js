@@ -76,7 +76,9 @@ class Game extends Component{
           animated={this.state.buttonShouldAnimate}
           onPressButton={this.props.onPressButton}
         />)
-      views.push(<Fuse key='fuse' duration={this.props.turnDuration}/>)
+      if(this.props.turnDuration) {
+        views.push(<Fuse key='fuse' duration={this.props.turnDuration}/>)
+      }
       justifyContent = 'space-between'
     } else {
       justifyContent = 'center'

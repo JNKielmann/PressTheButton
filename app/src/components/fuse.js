@@ -5,30 +5,37 @@ import {
   Image,
   View,
   Dimensions,
+  Animated
 } from 'react-native';
 
 var {width} = Dimensions.get('window')
 import * as Colors from '../constants/colors'
-import ReactTimeout from 'react-timeout/native'
 
 class Fuse extends Component{
-  componentWillReceiveProps(props) {
+  componentDidUpdate() {
+    if(this.props.duration) {
+      Animated.timing(
+        this.state.rectWidth,
+        {
+          duration: this.props.duration,
+          toValue: width + 40 //TODO: find out why width isn't enough
+        }
+      ).start()
+    }
+  }
+  componentWillReceiveProps() {
     this.setState(
       { 
-        updateCounter: 1,
-        percentage: 0
+        rectWidth: new Animated.Value(0)
       })
   }
   constructor(props) {
     super(props)
-    this.updatePercentage = this.updatePercentage.bind(this)
     this.state = {
-      percentage: 0,
-      updateCounter: 1
+      rectWidth:  new Animated.Value(0)
     }
   }
   render() {
-    var fuseWidth = width * this.state.percentage
     return (
         <View>
           <Image 
@@ -38,18 +45,10 @@ class Fuse extends Component{
             resizeMode={"contain"}
             source={require('../../res/fuse.png')}
           />
-          <View style={[styles.rectangle, {width: fuseWidth}]}>
-          </View>
+          <Animated.View style={[styles.rectangle, {width: this.state.rectWidth}]}>
+          </Animated.View>
         </View>
         )
-  }
-  updatePercentage() {
-    var newPercentage = 100 / this.props.duration * 1000 * this.state.updateCounter / 100
-    this.setState(
-      {
-        percentage: newPercentage,
-        updateCounter: this.state.updateCounter + 1
-      })
   }
 }
 
@@ -63,4 +62,4 @@ var styles = StyleSheet.create({
   }
 })
 
-export default ReactTimeout(Fuse)
+module.exports = Fuse
