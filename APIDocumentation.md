@@ -86,10 +86,30 @@ Every communication ist in the form:
 {
     event: "startRound",
     payload: { 
-        task: "You have to press someday...",
+        task: {...} // task object described below,
         lives: 3,
         timeTillStart: 5000 //in ms
     }
+}
+```
+Tasks:
+```javascript
+{
+    type: 'MyButtonIs',
+    attribute: {
+        name: 'color'|'text'|'shape'
+        value: 'red'|'blue'|'square' ...
+    },
+    onlyMine: true|false // Only mine button has the attribute
+}
+{
+    type: 'NButtonsAre',
+    attribute: {
+        name: 'color'|'text'|'shape'
+        value: 'red'|'blue'|'square' ...
+    },
+    n: 3,
+    comparator: 'atLeast'|'exactly' ...
 }
 ```
 ```javascript
