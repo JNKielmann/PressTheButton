@@ -87,7 +87,8 @@ Every communication ist in the form:
     event: "startRound",
     payload: { 
         task: "You have to press someday...",
-        lives: 3
+        lives: 3,
+        timeTillStart: 5000 //in ms
     }
 }
 ```
