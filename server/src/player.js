@@ -1,4 +1,5 @@
 import uuid from 'node-uuid'
+import AllTasks from './tasks/allTasks'
 
 export class Player {
   constructor(wsConnection) {
@@ -17,6 +18,16 @@ export class Player {
     this.name = playerName
     this.game = game
     game.addPlayer(this)
+  }
+  pressButton(state) {
+    const result = AllTasks.testIfTrueForState(this.task, state)
+    if (result.pressCorrect) {
+      console.log('valid turn')
+      this.hasPressed = true
+      this.emit('validTurn', {})
+    } else {
+      this.failedPress([this.id], false)
+    }
   }
   failedPress(involvedPlayerIds, notPressed) {
     --this.lives

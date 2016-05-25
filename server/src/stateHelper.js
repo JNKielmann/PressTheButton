@@ -11,3 +11,13 @@ const words = ['red', 'green', 'blue', 'yellow', 'purple']
 export function randomButtonText() {
   return randomArrayElement(words)
 }
+
+const attributes = [{ name: 'buttonColor', generateRandom: randomButtonColor },
+                    { name: 'buttonText', generateRandom: randomButtonText }]
+export function randomAttribute() {
+  const attribute = randomArrayElement(attributes)
+  return {
+    name: attribute.name,
+    value: attribute.generateRandom(),
+  }
+}
