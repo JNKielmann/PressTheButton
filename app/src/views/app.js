@@ -15,7 +15,6 @@ import Login from './login'
 import MainMenu from './mainMenu'
 import Lobby from './lobby'
 import Game from './game'
-import Loser from './loser'
 import BarcodeScanner from 'react-native-barcodescanner'
 import ReactTimeout from 'react-timeout/native'
 import I18n from 'react-native-i18n'
@@ -123,8 +122,13 @@ class App extends Component{
             newGameState={this.state.newGameState}
             roundEnded={this.state.roundEnded}
             timeTillStart={this.state.timeTillStart}
+            isHost={this.state.isHost}
+            playerId={this.state.playerId}
             onPressButton={()=>this.onPressButton()}
             onButtonAnimated={()=>this.onButtonAnimated()}
+            onNextRound={()=>{
+              Connection.doStartRound({ playerId: this.state.playerId })
+            }}
           />
         )
       case 'qrCodeReader':
@@ -134,24 +138,6 @@ class App extends Component{
             style={{ flex: 1 }}
             torchMode={'off'}
             cameraType={'back'}
-          />
-        )
-      case 'loser':
-        return (
-          <Loser
-            loser={this.state.loser}
-            isHost={this.state.isHost}
-            onNextRound={() => {
-              Connection.doStartRound({playerId: this.state.playerId})
-            }}
-            onGiveUp={() => {
-              Connection.doRemoveFromGame(
-                {
-                  playerId: this.state.playerId,
-                  gameId: this.state.gameId
-                })
-              navigator.pop()
-            }}
           />
         )
     }
@@ -209,7 +195,8 @@ class App extends Component{
         flashScreen: false,
         notPressed: false,
         roundEnded: false,
-        timeTillStart: data.payload.timeTillStart
+        timeTillStart: data.payload.timeTillStart,
+        turnDuration: 0
       })
       this.refs.navigator.replace({
         name: 'game',

@@ -13,21 +13,28 @@ import * as Colors from '../constants/colors'
 
 class Fuse extends Component{
   componentDidUpdate() {
-    if(this.props.duration) {
+    if(this.props.shouldUpdate) {
       Animated.timing(
         this.state.rectWidth,
         {
           duration: this.props.duration,
-          toValue: width + 40 //TODO: find out why width isn't enough
+          toValue: width + 42 //TODO: find out why width isn't enough
         }
       ).start()
     }
+    if(this.props.stop) {
+      Animated.timing(
+        this.state.rectWidth
+      ).stop()
+    }
   }
-  componentWillReceiveProps() {
-    this.setState(
-      { 
-        rectWidth: new Animated.Value(0)
-      })
+  componentWillReceiveProps(props) {
+    if(props.shouldUpdate) {
+      this.setState(
+        { 
+          rectWidth: new Animated.Value(0)
+        })
+    }
   }
   constructor(props) {
     super(props)

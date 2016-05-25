@@ -5,6 +5,7 @@ export default {
     cancel: 'Abbrechen',
     startGame: 'Spiel Starten',
     lostRound: ' hat die Runde verloren!',
+    youLostRound: 'Du hast die Runde verloren!',
     nextRound: 'Nächste Runde',
     giveUp: 'Aufgeben',
     invalidNameMessage: 'Ungültiger Name',

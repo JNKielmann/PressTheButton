@@ -4,11 +4,12 @@ import {
   StyleSheet,
   Text,
   View,
+  Dimensions
 } from 'react-native';
 
 import * as Colors from '../constants/colors'
 import I18n from 'react-native-i18n'
-
+var {width} = Dimensions.get('window')
 
 class TaskView extends Component{
   render() {
@@ -27,7 +28,8 @@ class TaskView extends Component{
 
 var styles = StyleSheet.create({
   taskView: {
-    marginTop: 50
+    marginTop: 20,
+    width: width
   },
   taskHeaderView: {
     padding: 5,

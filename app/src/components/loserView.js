@@ -3,30 +3,42 @@ import {
   AppRegistry,
   StyleSheet,
   View,
-  Text
+  Text,
+  Dimensions
 } from 'react-native';
 
 import Button from 'react-native-button'
 import * as Colors from '../constants/colors'
 import I18n from 'react-native-i18n'
 
-class Loser extends Component{
+var {width, height} = Dimensions.get('window')
+var viewHeight = 100
+
+class LoserView extends Component{
   constructor(props){
     super(props)
     this.onPressNextRound = this.onPressNextRound.bind(this)
-    this.onPressGiveUp = this.onPressGiveUp.bind(this)
   }
   render() {
+    var viewStyle={}
+    var lostText = ''
+    if(this.props.playerId === this.props.loserId) {
+      lostText = I18n.t('youLostRound')
+    } else {
+      lostText = this.props.loserName + I18n.t('lostRound')
+    }
+    if(this.props.isModel) {
+      var top = height / 2 - viewHeight / 2
+      viewStyle = {
+        position: 'absolute',
+        top: top,
+        height: viewHeight
+      }
+    }
     return (
-      <View style={styles.container}>
-        <Text style={styles.text}>{this.props.loser}{I18n.t('lostRound')}</Text>
+      <View style={[styles.container, viewStyle]}>
+        <Text style={styles.text}>{lostText}</Text>
         {this.showNextRoundButtonIfNecessery(this.props.isHost)}
-        <Button 
-          containerStyle={[styles.button, styles.buttonGiveUp]}
-          style={styles.buttonText} 
-          onPress={this.onPressGiveUp}>
-          {I18n.t('giveUp')}
-        </Button>
       </View>
     )
   }
@@ -45,17 +57,13 @@ class Loser extends Component{
   onPressNextRound() {
     this.props.onNextRound()
   }
-  onPressGiveUp() {
-    this.props.onGiveUp()
-  }
 }
 
 var styles = StyleSheet.create({
   text: {
-    marginTop: 200,
     fontSize: 30,
     textAlign: 'center',
-    color: Colors.LOGIN_INFO_TEXT
+    color: Colors.LOSER_INFO_TEXT
   },
   buttonText: {
     fontSize: 24,
@@ -70,15 +78,14 @@ var styles = StyleSheet.create({
     borderRadius: 20,
     overflow: 'hidden',
   },
-  buttonGiveUp: {
-    marginBottom: 40
-  },
   container: {
-    flex: 1,
-    justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: Colors.BACKGROUND
-  },
+    justifyContent: 'center',
+    alignSelf: 'center',
+    backgroundColor: Colors.LOSER_VIEW_BACKGROUND,
+    opacity: 0.9,
+    width: width
+  }
 })
 
-module.exports = Loser
+module.exports = LoserView

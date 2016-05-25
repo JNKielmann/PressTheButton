@@ -5,11 +5,14 @@ import {
   TouchableHighlight,
   Text,
   View,
+  Dimensions
 } from 'react-native';
 
 import Color from 'color'
 import * as Colors from '../constants/colors'
 import * as Animatable from 'react-native-animatable'
+var {width, height} = Dimensions.get('window')
+var buttonSize = width  - 40
 
 
 class Button extends Component{
@@ -76,7 +79,10 @@ class Button extends Component{
 
 var styles = StyleSheet.create({
   buttonArea: {
-    alignSelf: 'center'
+    alignSelf: 'center',
+    position: 'absolute',
+    top: height / 2 - buttonSize / 2,
+    left: width / 2 - buttonSize / 2
   },
   buttonText: {
     fontSize: 80,
@@ -84,8 +90,8 @@ var styles = StyleSheet.create({
     textAlign: 'center'
   },
   button: {
-    width: 320,
-    height: 320,
+    width: buttonSize,
+    height: buttonSize,
     borderWidth: 2,
     borderRadius: 250,
     overflow: 'hidden',
