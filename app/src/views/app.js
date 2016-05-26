@@ -213,6 +213,7 @@ class App extends Component{
       })
     })
     Connection.onUpdateGameState((data) => {
+      console.log(data.payload)
       this.setState({
         gameData: data.payload.state,
         turnDuration: data.payload.turnDuration,

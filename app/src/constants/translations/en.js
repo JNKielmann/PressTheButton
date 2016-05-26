@@ -9,5 +9,17 @@ export default {
     nextRound: 'Next Round',
     giveUp: 'Give Up',
     invalidNameMessage: 'Invalid Name',
-    taskHeader: 'Press the button if'
+    taskHeader: 'Press your button if',
+    MyButtonIsbuttonColorPre: 'it has the color ',
+    MyButtonIsbuttonColorPost: '',
+    MyButtonIsbuttonTextPre: 'reads "',
+    MyButtonIsbuttonTextPost: '"',
+    MyButtonIsbuttonShapePre: 'it has the shape ',
+    MyButtonIsbuttonShapePost: '',
+    NButtonsArebuttonColorPre: ' have the color ',
+    NButtonsArebuttonColorPost: '',
+    NButtonsArebuttonTextPre: ' buttons read "',
+    NButtonsArebuttonTextPost: '"',
+    NButtonsArebuttonShapePre: ' have the shape ',
+    NButtonsArebuttonShapePost: ''
   }

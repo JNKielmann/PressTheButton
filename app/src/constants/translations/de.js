@@ -9,5 +9,17 @@ export default {
     nextRound: 'Nächste Runde',
     giveUp: 'Aufgeben',
     invalidNameMessage: 'Ungültiger Name',
-    taskHeader: 'Drücke den Knopf wenn'
+    taskHeader: 'Drücke deinen Knopf wenn',
+    MyButtonIsbuttonColorPre: 'er die Farbe ',
+    MyButtonIsbuttonColorPost: ' hat',
+    MyButtonIsbuttonTextPre: 'er den Text "',
+    MyButtonIsbuttonTextPost: '" draufstehen hat',
+    MyButtonIsbuttonShapePre: 'er die Form ',
+    MyButtonIsbuttonShapePost: ' hat',
+    NButtonsArebuttonColorPre: ' die Farbe ',
+    NButtonsArebuttonColorPost: ' haben',
+    NButtonsArebuttonTextPre: ' den Text "',
+    NButtonsArebuttonTextPost: '" draufstehen haben',
+    NButtonsArebuttonShapePre: ' die Form ',
+    NButtonsArebuttonShapePost: ' haben'
   }
