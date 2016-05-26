@@ -5,6 +5,10 @@
     "extends": "airbnb-base",
     "rules":{
         "semi": [2, "never"],
-        "no-console": 0
-    }
+        "no-console": 0,
+        "arrow-body-style": 0
+    },    
+    "env": {
+        "mocha": true
+    }    
 }

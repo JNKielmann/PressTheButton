@@ -1,5 +1,5 @@
 import { Game } from './game'
-import { generateTasks } from './generateTasks'
+import { generateTasks } from './tasks/generateTasks'
 
 const currentGames = {}
 
@@ -44,28 +44,29 @@ export const messageHandler = {
       return
     }
     const timeTillStart = 6000
-    generateTasks(game)
+    generateTasks(game.players)
     game.forEachPlayer((p) => {
       p.lives = 1
-      p.emit('startRound', {
-        task: p.task.text,
+      const payload = {
+        task: p.task,
         lives: p.lives,
         timeTillStart,
-      })
+      }
+      console.dir(payload)
+      p.emit('startRound', payload)
     })
     setTimeout(() => game.startGameLoop(), timeTillStart)
   },
   action: (player, payload) => {
     const game = player.game
     if (payload.type === 'buttonPressed') {
-      const result = player.task.validatePress(game.state)
-      if (result.pressCorrect) {
-        console.log('valid turn')
-        player.hasPressed = true
-        player.emit('validTurn', {})
-      } else {
-        player.failedPress([player.id], false)
+      if (!player.task || !game.state) {
+        console.warn(`Server was in invalid state when player pressed button\n
+                      player.task = ${player.task}\n
+                      game.state = ${game.state}\n
+                      Ingnoring button press`)
       }
+      player.pressButton(game.state)
     }
   },
   removeFromGame: (player, payload) => {

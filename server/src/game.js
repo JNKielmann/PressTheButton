@@ -1,5 +1,6 @@
 import uuid from 'node-uuid'
 import { randomButtonColor, randomButtonText } from './stateHelper'
+import AllTasks from './tasks/allTasks'
 
 
 export class Game {
@@ -73,7 +74,7 @@ export class Game {
   testForMissedPress() {
     this.forEachPlayer((p) => {
       if (!p.hasPressed) {
-        const result = p.task.validatePress(this.state)
+        const result = AllTasks.testIfTrueForState(p.task, this.state)
         if (result.pressCorrect) {
           p.failedPress(result.involvedPlayerIds, true)
         }

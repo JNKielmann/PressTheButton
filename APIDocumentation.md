@@ -87,8 +87,8 @@ Every communication ist in the form:
     event: "startRound",
     payload: { 
         task: {...} // task object described below,
-        lives: 3,
-        timeTillStart: 5000 //in ms
+        lives: 1,
+        timeTillStart: 6000 //in ms
     }
 }
 ```
@@ -97,15 +97,15 @@ Tasks:
 {
     type: 'MyButtonIs',
     attribute: {
-        name: 'color'|'text'|'shape'
+        name: 'buttonColor'|'buttonText'|'buttonShape'
         value: 'red'|'blue'|'square' ...
     },
-    onlyMine: true|false // Only mine button has the attribute
+    onlyMine: true|false // Only my button has the attribute
 }
 {
     type: 'NButtonsAre',
     attribute: {
-        name: 'color'|'text'|'shape'
+        name: 'buttonColor'|'buttonText'|'buttonShape'
         value: 'red'|'blue'|'square' ...
     },
     n: 3,
