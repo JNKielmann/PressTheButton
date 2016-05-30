@@ -44,7 +44,8 @@ public class MainActivity extends ReactActivity {
             new VectorIconsPackage(),
             new BarcodeScanner(),
             new RCTCameraPackage(),
-            new BarcodeScanner()
+            new BarcodeScanner(),
+            new TcpSocketsModule()
         );
     }
 }
