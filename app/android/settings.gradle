@@ -1,6 +1,8 @@
 rootProject.name = 'PressTheButton'
 
 include ':app'
+include ':react-native-barcodescanner'
+project(':react-native-barcodescanner').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-barcodescanner/android')
 include ':react-native-i18n'
 project(':react-native-i18n').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-i18n/android')
 include ':react-native-vector-icons'
