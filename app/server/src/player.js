@@ -1,15 +1,15 @@
 import uuid from 'node-uuid'
 import AllTasks from './tasks/allTasks'
 
-export class Player {
-  constructor(wsConnection) {
+export default class Player {
+  constructor(sendFunction) {
     this.id = uuid.v1()
     this.name = ''
-    this.wsConnection = wsConnection
+    this.sendFunction = sendFunction
     this.hasPressed = false
   }
   emit(event, payload) {
-    this.wsConnection.send(JSON.stringify({
+    this.sendFunction(JSON.stringify({
       event,
       payload,
     }))

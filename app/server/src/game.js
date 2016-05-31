@@ -35,7 +35,6 @@ export class Game {
         notPressed,
       }
       console.log(`send player ${p.id}:`)
-      console.dir(payload)
       p.emit('endRound', payload)
     })
     this.stopGameLoop()
@@ -99,8 +98,6 @@ export class Game {
       })
       // }
     })
-    console.log('State is: ')
-    console.dir(this.state)
   }
 
   /**

@@ -47,13 +47,12 @@ export const messageHandler = {
     generateTasks(game.players)
     game.forEachPlayer((p) => {
       p.lives = 1
-      const payload = {
+      const startRoundPayload = {
         task: p.task,
         lives: p.lives,
         timeTillStart,
       }
-      console.dir(payload)
-      p.emit('startRound', payload)
+      p.emit('startRound', startRoundPayload)
     })
     setTimeout(() => game.startGameLoop(), timeTillStart)
   },

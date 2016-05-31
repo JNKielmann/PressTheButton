@@ -8,6 +8,7 @@ import com.lwansbrough.RCTCamera.RCTCameraPackage;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.eguma.barcodescanner.BarcodeScanner;
+import com.peel.react.*; 
 
 import java.util.Arrays;
 import java.util.List;

@@ -22,7 +22,10 @@
     "mocha": "^2.5.1"
   },
   "dependencies": {
+    "assert": "^1.4.0",
+    "buffer": "^4.6.0",
     "node-uuid": "^1.4.7",
+    "react-native-tcp": "^1.0.1",
     "websocket": "^1.0.23"
   }
 }
