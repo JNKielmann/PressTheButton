@@ -6,7 +6,7 @@ import {
   Alert
 } from 'react-native';
 
-import * as Connection from '../network/connector'
+import * as Connection from '../network/tcpConnector'
 import * as ActionTypes from '../constants/actionTypes'
 import * as FeedbackConstants from '../constants/feedback'
 import * as Translations from '../constants/translations'
@@ -22,7 +22,8 @@ import I18n from 'react-native-i18n'
 class App extends Component{
   constructor(props){
     super(props)
-    Connection.init()
+    console.log('App Start')
+    //Connection.init()
     Translations.init()
     this.renderScene = this.renderScene.bind(this)
     this.turnOffValidTurn = this.turnOffValidTurn.bind(this)
@@ -169,6 +170,7 @@ class App extends Component{
     this.setState({gameId: e.data})
     Connection.doJoinGame(
       {
+        ip: 'xxx.xxx.xxx.xxx', // Hardcoded IP
         gameId: e.data,
         name: this.state.name
       }
