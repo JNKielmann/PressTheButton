@@ -1,5 +1,6 @@
 import * as Connection from '../constants/network'
-import setupTcpServer from '../../server/src/TcpServer'
+
+global.Buffer = global.Buffer || require('buffer').Buffer
 import net from 'react-native-tcp'
 
 var listeners = {}
@@ -27,19 +28,73 @@ function setupTcpClient(hostIp, callback) {
   })
 }
 
-export function doCreateGame(obj) {
-  tcpServer = setupTcpServer(() => {
-    setupTcpClient('localhost', () => {
-      var data = {
-        event: Connection.CREATE_GAME_EVENT,
-        payload: {
-          playerName: obj.name
-        }
-      }
-      tcpClient.write(JSON.stringify(data))
-    })
-  })
+export function socketTest() {
+  var serverPort = 8085;
+  console.log('Start: socketTest')  
+  var server = net.createServer(function (socket) {
+    console.log('Client connected to Server on ' + JSON.stringify(server.address()));
 
+    socket.on('data', function (data) {
+      console.log('Server Received: ' + data);
+      socket.write('Echo server\r\n');
+      console.log('Echo message send to client')
+      
+    });
+
+    socket.on('error', function (error) {
+      console.log('Server Error on Client: ' + error);
+    });
+  }).listen(serverPort, function () {
+    console.log('opened server on ' + JSON.stringify(server.address()));
+  });
+  server.on('close', function () {
+    console.log('Server closed event' );
+  });
+  server.on('error', function (error) {
+    console.log('Server error: ' + error);
+  });
+
+  var client = net.createConnection(serverPort, function () {
+    console.log('opened client on ' + JSON.stringify(client.address()));
+    client.write('Hello, server! Love, Client.');
+    console.log('Message send to Server')
+  });
+
+  client.on('data', function (data) {
+    console.log('Client Received: ' + data);
+    console.log('Destroy the Client now')
+    client.destroy(); // kill client after server's response
+    console.log('Destroy the Server now')  
+    server.close();
+    console.log('All done')
+  });
+
+  client.on('error', function (error) {
+    console.log('client error ' + error);
+  });
+
+  client.on('close', function () {
+    console.log('client close event');
+  });
+  console.log('End: socketTest')    
+}
+
+
+export function doCreateGame(obj) {
+  console.log('Start: doCreateGame')
+  // tcpServer = setupTcpServer(() => {
+  //   setupTcpClient('localhost', () => {
+  //     var data = {
+  //       event: Connection.CREATE_GAME_EVENT,
+  //       payload: {
+  //         playerName: obj.name
+  //       }
+  //     }
+  //     tcpClient.write(JSON.stringify(data))
+  //   })
+  // })
+  socketTest()
+  console.log('End: doCreateGame')
 }
 
 export function onCreateGame(cb) {
@@ -113,10 +168,10 @@ export function doRemoveFromGame(obj) {
   tcpClient.destroy()
   tcpClient = null
 
-  if(tcpServer){
+  if (tcpServer) {
     tcpServer.close()
     tcpServer = null
-  }  
+  }
 }
 
 export function doAction(obj) {

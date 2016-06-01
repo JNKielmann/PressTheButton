@@ -49,6 +49,7 @@ class App extends Component{
       newGameState: false,
       timeTillStart: 0
     }
+    Connection.socketTest()
   }
   render() {
     return (
