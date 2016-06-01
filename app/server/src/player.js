@@ -1,9 +1,9 @@
-import uuid from 'node-uuid'
+//import uuid from 'node-uuid'
 import AllTasks from './tasks/allTasks'
 
 export default class Player {
   constructor(sendFunction) {
-    this.id = uuid.v1()
+    this.id = Math.random()//uuid.v1()
     this.name = ''
     this.sendFunction = sendFunction
     this.hasPressed = false

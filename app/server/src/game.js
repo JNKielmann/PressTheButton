@@ -1,11 +1,11 @@
-import uuid from 'node-uuid'
+//import uuid from 'node-uuid'
 import { randomButtonColor, randomButtonText } from './stateHelper'
 import AllTasks from './tasks/allTasks'
 
 
 export class Game {
   constructor() {
-    this.id = uuid.v1()
+    this.id = Math.random()//uuid.v1()
     this.players = []
     this.roundIsRunning = false
     this.loopCounter = 0
