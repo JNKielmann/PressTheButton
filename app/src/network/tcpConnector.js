@@ -1,5 +1,5 @@
 import * as Connection from '../constants/network'
-import setupTcpServer from '../../server/src/TcpServer'
+import setupTcpServer from '../server/TcpServer'
 
 global.Buffer = global.Buffer || require('buffer').Buffer
 import net from 'react-native-tcp'
