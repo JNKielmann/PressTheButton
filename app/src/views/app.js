@@ -23,7 +23,6 @@ class App extends Component{
   constructor(props){
     super(props)
     console.log('App Start')
-    //Connection.init()
     Translations.init()
     this.renderScene = this.renderScene.bind(this)
     this.turnOffValidTurn = this.turnOffValidTurn.bind(this)
@@ -49,6 +48,10 @@ class App extends Component{
       newGameState: false,
       timeTillStart: 0
     }
+  }
+  componentWillUnmount(){
+    Connection.cleanUp()
+    console.log('unmount App')
   }
   render() {
     return (
