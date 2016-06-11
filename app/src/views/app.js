@@ -173,8 +173,7 @@ class App extends Component{
     this.setState({gameId: e.data})
     Connection.doJoinGame(
       {
-        ip: 'xxx.xxx.xxx.xxx', // Hardcoded IP
-        gameId: e.data,
+        ip: '192.168.1.5', // Hardcoded IP
         name: this.state.name
       }
     )

@@ -70,7 +70,6 @@ export function doJoinGame(obj) {
     var data = {
       event: Connection.JOIN_GAME_EVENT,
       payload: {
-        gameId: obj.gameId,
         playerName: obj.name
       }
     }

@@ -26,7 +26,7 @@ export default function setupTcpServer(callback) {
     socket.on('end', () => {
       console.log(`Client ${socket.remoteAddress} disconnected.`)
     })
-  }).listen(8085)
+  }).listen(8085, '0.0.0.0')
   server.once('listening', () => {
     console.log(`Server is listening on port 8085 at ${server.address().address}`)
     callback()

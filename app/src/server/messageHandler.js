@@ -1,7 +1,7 @@
 import { Game } from './game'
 import { generateTasks } from './tasks/generateTasks'
 
-const currentGames = {}
+const currentGame = null
 
 export const messageHandler = {
   createGame: (player, payload) => {
@@ -11,7 +11,7 @@ export const messageHandler = {
     }
     const game = new Game()
     player.joinGame(payload.playerName, game)
-    currentGames[game.id] = game
+    currentGame = game
     player.emit('createGame', {
       gameId: game.id,
       playerId: player.id,
@@ -20,7 +20,8 @@ export const messageHandler = {
     console.log('Game created')
   },
   joinGame: (player, payload) => {
-    const game = currentGames[payload.gameId]
+    var game = currentGame
+    
     if (!game) {
       console.log(`Client tried to join not existing game ${payload.gameId}`)
       return
@@ -69,7 +70,7 @@ export const messageHandler = {
     }
   },
   removeFromGame: (player, payload) => {
-    const game = currentGames[payload.gameId]
+    const game = currentGame
     if (!game) {
       console.log(`Client tried to get removed from not existing game ${payload.gameId}`)
       return
@@ -82,7 +83,7 @@ export const messageHandler = {
     console.log('Player removed')
     if (game.getPlayerNames().length === 0) {
       game.stopGameLoop()
-      delete currentGames[payload.gameId]
+      currentGame = null
       console.log('Game deleted')
     }
   },
