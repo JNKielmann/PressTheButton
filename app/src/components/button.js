@@ -11,6 +11,7 @@ import {
 import Color from 'color'
 import * as Colors from '../constants/colors'
 import * as Animatable from 'react-native-animatable'
+import I18n from 'react-native-i18n'
 var {width, height} = Dimensions.get('window')
 var buttonSize = width  - 40
 
@@ -26,6 +27,10 @@ class Button extends Component{
     this.onPressButton = this.onPressButton.bind(this)
   }
   render() {
+    var text = this.props.text
+    if(text && text !== 1 && text !== 2 && text !== 3) {
+      text = I18n.t(this.props.text)
+    }
     var buttonText180 
     if(this.props.text180) {
     buttonText180 = (
@@ -36,7 +41,7 @@ class Button extends Component{
               {color: this.calcButtonTextColor(this.props.color)},
               styles.buttonText
             ]}>
-          {this.props.text}
+          {text}
         </Text>)
     }
     return (
@@ -58,7 +63,7 @@ class Button extends Component{
                       {color: this.calcButtonTextColor(this.props.color)},
                       styles.buttonText
                     ]}>
-                  {this.props.text}
+                    {text}
                 </Text>
             </View>
           </TouchableHighlight>
